@@ -10,11 +10,10 @@ import javax.persistence.Column;
 import javax.persistence.EntityListeners;
 import javax.persistence.MappedSuperclass;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public class Auditable<U> {
+public abstract class Auditable<U> {
     @CreatedBy
     @Column(name = "created_by")
     private U createdBy;

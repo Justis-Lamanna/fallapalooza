@@ -1,6 +1,7 @@
 package com.github.lucbui.fallapalooza;
 
 import com.github.lucbui.fallapalooza.entity.Team;
+import com.github.lucbui.fallapalooza.entity.TeamMember;
 import com.github.lucbui.fallapalooza.entity.Tournament;
 import com.github.lucbui.fallapalooza.entity.User;
 import com.github.lucbui.fallapalooza.repository.TeamRepository;
@@ -13,6 +14,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
+import javax.sql.DataSource;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.OffsetDateTime;
@@ -30,18 +34,19 @@ public class FallapaloozaApplication {
 	}
 
 	@Bean
-	public CommandLineRunner demo(UserRepository ur, TeamRepository tr, TournamentRepository r) {
+	public CommandLineRunner demo(TournamentRepository r) {
 		return (args) -> {
 			Tournament fall = new Tournament("Fallapalooza");
 			fall.setStartDate(OffsetDateTime.now());
 			Team t1 = new Team("Lavender Lemurs");
+			User common = new User("BHappen");
+			t1.addTeamMember(new TeamMember(new User("Pirauxide")));
+			t1.addTeamMember(new TeamMember(common));
+			fall.addTeam(t1);
 			Team t2 = new Team("Team Lame");
-			User p1 = new User("Pirauxide");
-			User p2 = new User("BHappen");
-			User p3 = new User("Lucbui");
-			t1.setUsers(Arrays.asList(p1, p2));
-			t2.setUsers(Arrays.asList(p3));
-			fall.setTeams(Arrays.asList(t1, t2));
+			t2.addTeamMember(new TeamMember(new User("Lucbui")));
+			t2.addTeamMember(new TeamMember(common));
+			fall.addTeam(t2);
 
 			r.save(fall);
 

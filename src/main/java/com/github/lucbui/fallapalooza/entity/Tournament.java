@@ -1,10 +1,12 @@
 package com.github.lucbui.fallapalooza.entity;
 
 import lombok.*;
+import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -37,4 +39,15 @@ public class Tournament extends Auditable<String> {
     @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
     @JoinColumn(name = "tournament_id", referencedColumnName = "id")
     private List<Team> teams;
+
+    /**
+     * Add a team to this tournament
+     * @param team The team to add
+     */
+    public void addTeam(Team team) {
+        if(teams == null) {
+            teams = new ArrayList<>();
+        }
+        teams.add(team);
+    }
 }

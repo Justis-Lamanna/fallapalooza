@@ -3,7 +3,6 @@ package com.github.lucbui.fallapalooza.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
@@ -11,15 +10,14 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
 @ToString(callSuper = true)
-public class User extends Auditable<String> {
+public class TeamMember extends Auditable<String> {
     @Id
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NonNull
-    private String name;
-    private String pronouns;
-    private String discordId;
-    private String twitchId;
+    @ManyToOne(optional = false, cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    private User player;
 }

@@ -3,6 +3,7 @@ package com.github.lucbui.fallapalooza.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -21,11 +22,18 @@ public class Team extends Auditable<String> {
     private String name;
     private String color;
 
-    @ManyToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "team_member",
-            joinColumns = @JoinColumn(name="team_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id")
-    )
-    private List<User> users;
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "team_id", referencedColumnName = "id")
+    private List<TeamMember> members;
+
+    /**
+     * Add a member to this tournament
+     * @param member The member to add
+     */
+    public void addTeamMember(TeamMember member) {
+        if(members == null) {
+            members = new ArrayList<>();
+        }
+        members.add(member);
+    }
 }
