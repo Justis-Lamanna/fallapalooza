@@ -5,6 +5,7 @@ import lombok.*;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,4 +33,8 @@ public class Tournament extends Auditable<String> {
 
     @Column(name = "end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime endDate;
+
+    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @JoinColumn(name = "tournament_id", referencedColumnName = "id")
+    private List<Team> teams;
 }
