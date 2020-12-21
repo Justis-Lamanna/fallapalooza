@@ -25,7 +25,8 @@ public class FallapaloozaApplication {
 			TeamMemberRepository teamMemberRepository,
 			TeamRepository teamRepository,
 			UserRepository userRepository,
-			RoundRepository roundRepository) {
+			RoundRepository roundRepository,
+			ScoreRepository scoreRepository) {
 		return (args) -> {
 			Tournament fall = new Tournament("Fallapalooza");
 			fall.setStartDate(OffsetDateTime.now());
@@ -51,8 +52,18 @@ public class FallapaloozaApplication {
 			User p2 = new User("BHappen");
 			p2 = userRepository.save(p2);
 
-			teamMemberRepository.save(new TeamMember(t1, p1));
-			teamMemberRepository.save(new TeamMember(t1, p2));
+			TeamMember m1 = teamMemberRepository.save(new TeamMember(t1, p1));
+			TeamMember m2 = teamMemberRepository.save(new TeamMember(t1, p2));
+
+			Score s1 = new Score(1, 200);
+			s1.setRound(round1);
+			s1.setTeamMember(m1);
+			s1 = scoreRepository.save(s1);
+
+			Score s2 = new Score(1, 300);
+			s2.setRound(round1);
+			s2.setTeamMember(m2);
+			s2 = scoreRepository.save(s2);
 		};
 	}
 }
