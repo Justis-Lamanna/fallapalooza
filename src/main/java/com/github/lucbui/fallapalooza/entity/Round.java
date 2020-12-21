@@ -10,25 +10,26 @@ import java.time.OffsetDateTime;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
-@ToString(callSuper = true)
-public class Tournament extends Auditable<String> {
+@ToString(callSuper = true, exclude = "tournament")
+public class Round extends Auditable<String> {
     @Id
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
     @NonNull
+    private Integer number;
+
+    @NonNull
     private String name;
-
-    @Column(name = "sign_up_start_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private OffsetDateTime signUpStartDate;
-
-    @Column(name = "sign_up_end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private OffsetDateTime signUpEndDate;
 
     @Column(name = "start_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime startDate;
 
     @Column(name = "end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime endDate;
+
+    @ManyToOne
+    @JoinColumn(name = "tournament_id", referencedColumnName = "id")
+    private Tournament tournament;
 }

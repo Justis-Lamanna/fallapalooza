@@ -2,17 +2,14 @@ package com.github.lucbui.fallapalooza.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "tournament")
 public class Team extends Auditable<String> {
     @Id
     @Setter(AccessLevel.PROTECTED)
@@ -22,4 +19,9 @@ public class Team extends Auditable<String> {
     @NonNull
     private String name;
     private String color;
+    private Integer seed;
+
+    @ManyToOne
+    @JoinColumn(name = "tournament_id", referencedColumnName = "id")
+    private Tournament tournament;
 }
