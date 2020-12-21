@@ -2,9 +2,10 @@ package com.github.lucbui.fallapalooza.entity;
 
 import lombok.*;
 
-import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 
 @Entity
 @Getter
@@ -21,19 +22,4 @@ public class Team extends Auditable<String> {
     @NonNull
     private String name;
     private String color;
-
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
-    @JoinColumn(name = "team_id", referencedColumnName = "id")
-    private List<TeamMember> members;
-
-    /**
-     * Add a member to this tournament
-     * @param member The member to add
-     */
-    public void addTeamMember(TeamMember member) {
-        if(members == null) {
-            members = new ArrayList<>();
-        }
-        members.add(member);
-    }
 }

@@ -1,10 +1,8 @@
 package com.github.lucbui.fallapalooza.entity;
 
 import lombok.*;
-import org.springframework.util.CollectionUtils;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +12,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = "teams")
 public class Tournament extends Auditable<String> {
     @Id
     @Setter(AccessLevel.PROTECTED)
@@ -36,7 +34,7 @@ public class Tournament extends Auditable<String> {
     @Column(name = "end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime endDate;
 
-    @OneToMany(cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @OneToMany
     @JoinColumn(name = "tournament_id", referencedColumnName = "id")
     private List<Team> teams;
 

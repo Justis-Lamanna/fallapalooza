@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
-@ToString(callSuper = true)
+@ToString(callSuper = true, exclude = {"team", "player"})
 public class TeamMember extends Auditable<String> {
     @Id
     @Setter(AccessLevel.PROTECTED)
@@ -17,7 +17,12 @@ public class TeamMember extends Auditable<String> {
     private Long id;
 
     @NonNull
-    @ManyToOne(optional = false, cascade = CascadeType.PERSIST, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "team_id", referencedColumnName = "id")
+    private Team team;
+
+    @NonNull
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User player;
 }
