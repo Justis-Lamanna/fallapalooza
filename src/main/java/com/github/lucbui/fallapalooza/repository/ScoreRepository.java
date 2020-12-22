@@ -1,6 +1,7 @@
 package com.github.lucbui.fallapalooza.repository;
 
 import com.github.lucbui.fallapalooza.entity.Score;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
@@ -30,4 +31,13 @@ public interface ScoreRepository extends CrudRepository<Score, Long> {
      * @return All scores for that round
      */
     List<Score> getScoreByRoundId(long roundId);
+
+    /**
+     * Get the scores for this entire team in this entire round
+     * @param roundId The round ID
+     * @param teamId The team ID
+     * @return All scores from this round for this team
+     */
+    @Query("SELECT s FROM Score s JOIN s.teamMember tm JOIN tm.team t JOIN s.round r WHERE t.id=:teamId AND r.id=:roundId")
+    List<Score> getScoreByRoundIdAndTeamId(long roundId, long teamId);
 }
