@@ -11,6 +11,9 @@ import java.time.OffsetDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
 @ToString(callSuper = true, exclude = "tournament")
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"tournament_id", "number"})
+)
 public class Round extends Auditable<String> {
     @Id
     @Setter(AccessLevel.PROTECTED)

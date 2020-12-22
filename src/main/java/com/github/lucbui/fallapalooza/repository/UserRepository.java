@@ -4,6 +4,7 @@ import com.github.lucbui.fallapalooza.entity.User;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * Repository to hold user data
@@ -21,12 +22,12 @@ public interface UserRepository extends CrudRepository<User, Long> {
      * @param discordId The Discord ID to search
      * @return The matched user, if present
      */
-    User getUserByDiscordId(String discordId);
+    Optional<User> getUserByDiscordId(String discordId);
 
     /**
      * Retrieve a user by its Twitch ID
      * @param twitchId The Discord ID to search
      * @return The matched user, if present
      */
-    User getUserByTwitchId(String twitchId);
+    Optional<User> getUserByTwitchId(String twitchId);
 }

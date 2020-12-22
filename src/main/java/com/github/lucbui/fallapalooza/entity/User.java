@@ -2,10 +2,7 @@ package com.github.lucbui.fallapalooza.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -21,7 +18,12 @@ public class User extends Auditable<String> {
 
     @NonNull
     private String name;
+
     private String pronouns;
+
+    @Column(unique = true)
     private String discordId;
+
+    @Column(unique = true)
     private String twitchId;
 }
