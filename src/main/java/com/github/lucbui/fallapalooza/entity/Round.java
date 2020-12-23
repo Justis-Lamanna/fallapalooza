@@ -32,7 +32,8 @@ public class Round extends Auditable<String> {
     @Column(name = "end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
     private OffsetDateTime endDate;
 
-    @ManyToOne
+    @NonNull
+    @ManyToOne(optional = false)
     @JoinColumn(name = "tournament_id", referencedColumnName = "id")
     private Tournament tournament;
 }

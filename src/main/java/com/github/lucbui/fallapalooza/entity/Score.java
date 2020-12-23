@@ -13,16 +13,18 @@ import javax.persistence.*;
 @Table(
         uniqueConstraints = @UniqueConstraint(columnNames = {"round_id", "member_id", "episode"})
 )
-public class Score {
+public class Score extends Auditable<String> {
     @Id
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NonNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "round_id", referencedColumnName = "id")
     private Round round;
 
+    @NonNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "member_id", referencedColumnName = "id")
     private TeamMember teamMember;

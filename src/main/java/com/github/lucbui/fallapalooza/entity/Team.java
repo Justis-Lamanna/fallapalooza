@@ -21,7 +21,8 @@ public class Team extends Auditable<String> {
     private String color;
     private Integer seed;
 
-    @ManyToOne
+    @NonNull
+    @ManyToOne(optional = false)
     @JoinColumn(name = "tournament_id", referencedColumnName = "id")
     private Tournament tournament;
 }
