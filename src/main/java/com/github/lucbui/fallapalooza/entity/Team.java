@@ -10,6 +10,9 @@ import javax.persistence.*;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
 @ToString(callSuper = true, exclude = "tournament")
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"tournament_id", "seed"})
+)
 public class Team extends Auditable<String> {
     @Id
     @Setter(AccessLevel.PROTECTED)

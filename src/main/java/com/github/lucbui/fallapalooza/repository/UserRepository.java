@@ -1,7 +1,7 @@
 package com.github.lucbui.fallapalooza.repository;
 
 import com.github.lucbui.fallapalooza.entity.User;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,7 +9,7 @@ import java.util.Optional;
 /**
  * Repository to hold user data
  */
-public interface UserRepository extends CrudRepository<User, Long> {
+public interface UserRepository extends PagingAndSortingRepository<User, Long> {
     /**
      * Retrieve users by their name
      * @param name The username

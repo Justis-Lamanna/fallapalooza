@@ -1,12 +1,12 @@
 package com.github.lucbui.fallapalooza.repository;
 
 import com.github.lucbui.fallapalooza.entity.Team;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface TeamRepository extends CrudRepository<Team, Long> {
+public interface TeamRepository extends PagingAndSortingRepository<Team, Long> {
     /**
      * Retrieve all teams in a tournament
      * @param id The tournament ID
@@ -16,8 +16,9 @@ public interface TeamRepository extends CrudRepository<Team, Long> {
 
     /**
      * Get a team by its seed #
+     * @param tournamentId The tournament ID
      * @param seed The seed number
      * @return The corresponding team
      */
-    Optional<Team> getTeamBySeed(long seed);
+    Optional<Team> getTeamByTournamentIdAndSeed(long tournamentId, int seed);
 }
