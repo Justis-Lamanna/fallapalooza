@@ -1,12 +1,12 @@
 package com.github.lucbui.fallapalooza.repository;
 
 import com.github.lucbui.fallapalooza.entity.Team;
-import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-public interface TeamRepository extends PagingAndSortingRepository<Team, Long> {
+public interface TeamRepository extends JpaRepository<Team, Long> {
     /**
      * Retrieve all teams in a tournament
      * @param id The tournament ID

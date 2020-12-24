@@ -20,6 +20,7 @@ public class Team extends Auditable<String> {
     private Long id;
 
     @NonNull
+    @Column(nullable = false)
     private String name;
     private String color;
     private Integer seed;

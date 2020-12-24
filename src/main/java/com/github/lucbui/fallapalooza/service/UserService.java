@@ -13,6 +13,11 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
+    /**
+     * Create a user
+     * @param request The user creation request
+     * @return The created user
+     */
     public User create(CreateUserRequest request) {
         User user = new User(request.getName());
         user.setPronouns(request.getPronouns());
@@ -21,6 +26,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * Update a user
+     * @param request The user update request
+     * @return The updated user
+     */
     public User update(UpdateUserRequest request) {
         User user = userRepository.findById(request.getId())
                 .orElseThrow(() -> new UserNotFoundException(request.getId()));
@@ -30,6 +40,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * Delete a user
+     * @param id The user ID
+     */
     public void delete(long id) {
         userRepository.deleteById(id);
     }
