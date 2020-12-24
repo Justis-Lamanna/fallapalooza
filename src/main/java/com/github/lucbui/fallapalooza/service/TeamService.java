@@ -7,7 +7,6 @@ import com.github.lucbui.fallapalooza.entity.User;
 import com.github.lucbui.fallapalooza.exception.TeamNotFoundException;
 import com.github.lucbui.fallapalooza.model.team.AddTeamMemberRequest;
 import com.github.lucbui.fallapalooza.model.team.CreateTeamRequest;
-import com.github.lucbui.fallapalooza.model.team.RemoveTeamMemberRequest;
 import com.github.lucbui.fallapalooza.model.team.UpdateTeamRequest;
 import com.github.lucbui.fallapalooza.repository.TeamMemberRepository;
 import com.github.lucbui.fallapalooza.repository.TeamRepository;
@@ -77,11 +76,10 @@ public class TeamService {
 
     /**
      * Remove a team member from a team
-     * @param request Team Member Removal request
+     * @param memberId TeamMember ID to remove
      */
-    public void removeTeamMember(RemoveTeamMemberRequest request) {
-        teamMemberRepository.getTeamMemberByTeamIdAndPlayerId(request.getTeamId(), request.getUserId())
-                .ifPresent(tm -> teamMemberRepository.delete(tm));
+    public void removeTeamMember(long memberId) {
+        teamMemberRepository.deleteById(memberId);
     }
 
     /**
