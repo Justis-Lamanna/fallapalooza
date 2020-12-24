@@ -18,6 +18,7 @@ public class Tournament extends Auditable<String> {
     private Long id;
 
     @NonNull
+    @Column(nullable = false)
     private String name;
 
     @Column(name = "sign_up_start_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
