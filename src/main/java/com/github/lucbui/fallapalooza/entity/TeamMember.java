@@ -28,4 +28,6 @@ public class TeamMember extends Auditable<String> {
     @ManyToOne(optional = false)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User player;
+
+    private boolean backup;
 }

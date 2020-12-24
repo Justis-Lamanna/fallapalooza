@@ -8,4 +8,5 @@ public class CreateUserRequest {
     private String pronouns;
     private String discordId;
     private String twitchId;
+    private String blurb;
 }

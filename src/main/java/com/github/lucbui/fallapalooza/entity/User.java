@@ -22,6 +22,8 @@ public class User extends Auditable<String> {
 
     private String pronouns;
 
+    private String blurb;
+
     @Column(unique = true)
     private String discordId;
 

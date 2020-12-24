@@ -6,4 +6,5 @@ import lombok.Data;
 public class AddTeamMemberRequest {
     private long teamId;
     private long userId;
+    private boolean backup;
 }

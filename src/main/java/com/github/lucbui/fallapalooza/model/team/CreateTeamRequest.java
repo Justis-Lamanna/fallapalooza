@@ -15,5 +15,6 @@ public class CreateTeamRequest {
     @Data
     public static class CreateMemberRequest {
         private long id;
+        private boolean backup;
     }
 }

@@ -23,6 +23,7 @@ public class UserService {
         user.setPronouns(request.getPronouns());
         user.setTwitchId(request.getTwitchId());
         user.setDiscordId(request.getDiscordId());
+        user.setBlurb(request.getBlurb());
         return userRepository.save(user);
     }
 
@@ -37,6 +38,7 @@ public class UserService {
         user.setName(request.getName());
         user.setPronouns(request.getPronouns());
         user.setDiscordId(request.getDiscordId());
+        user.setBlurb(request.getBlurb());
         return userRepository.save(user);
     }
 

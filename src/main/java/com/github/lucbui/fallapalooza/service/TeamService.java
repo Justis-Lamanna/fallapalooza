@@ -43,6 +43,7 @@ public class TeamService {
 
         for(CreateTeamRequest.CreateMemberRequest cmRequest : request.getMembers()) {
             TeamMember member = new TeamMember(team, userRepository.getOne(cmRequest.getId()));
+            member.setBackup(cmRequest.isBackup());
             teamMemberRepository.save(member);
         }
 
@@ -71,7 +72,9 @@ public class TeamService {
     public TeamMember addTeamMember(AddTeamMemberRequest request) {
         Team team = teamRepository.getOne(request.getTeamId());
         User user = userRepository.getOne(request.getUserId());
-        return teamMemberRepository.save(new TeamMember(team, user));
+        TeamMember tm = new TeamMember(team, user);
+        tm.setBackup(request.isBackup());
+        return teamMemberRepository.save(tm);
     }
 
     /**

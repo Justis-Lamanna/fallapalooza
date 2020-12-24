@@ -8,4 +8,5 @@ public class UpdateUserRequest {
     private String name;
     private String pronouns;
     private String discordId;
+    private String blurb;
 }
