@@ -17,6 +17,7 @@ public class User extends Auditable<String> {
     private Long id;
 
     @NonNull
+    @Column(nullable = false)
     private String name;
 
     private String pronouns;

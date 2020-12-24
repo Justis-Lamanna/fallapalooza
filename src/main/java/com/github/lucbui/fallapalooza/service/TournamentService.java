@@ -3,9 +3,8 @@ package com.github.lucbui.fallapalooza.service;
 import com.github.lucbui.fallapalooza.entity.Round;
 import com.github.lucbui.fallapalooza.entity.Tournament;
 import com.github.lucbui.fallapalooza.exception.TournamentNotFoundException;
-import com.github.lucbui.fallapalooza.model.tournament.CreateStandardTournamentRequest;
 import com.github.lucbui.fallapalooza.model.tournament.CreateTournamentRequest;
-import com.github.lucbui.fallapalooza.model.tournament.DeleteTournamentRequest;
+import com.github.lucbui.fallapalooza.model.tournament.QuickCreateTournamentRequest;
 import com.github.lucbui.fallapalooza.model.tournament.UpdateTournamentRequest;
 import com.github.lucbui.fallapalooza.repository.RoundRepository;
 import com.github.lucbui.fallapalooza.repository.TournamentRepository;
@@ -40,13 +39,8 @@ public class TournamentService {
      * @param request The tournament request
      * @return The created Tournament
      */
-    public Tournament createStandard(CreateStandardTournamentRequest request) {
-        Tournament t = new Tournament(request.getName());
-        t.setSignUpStartDate(request.getSignUpStartDate());
-        t.setSignUpEndDate(request.getSignUpEndDate());
-        t.setStartDate(request.getStartDate());
-        t.setEndDate(request.getEndDate());
-        t = tournamentRepository.save(t);
+    public Tournament createStandard(QuickCreateTournamentRequest request) {
+        Tournament t = tournamentRepository.save(new Tournament(request.getName()));
 
         for(int i = 0; i < 5; i++) {
             roundRepository.save(new Round(i, getRoundByIndex(i), t));
@@ -82,7 +76,7 @@ public class TournamentService {
         return tournamentRepository.save(t);
     }
 
-    public void delete(DeleteTournamentRequest request) {
-        tournamentRepository.deleteById(request.getId());
+    public void delete(long id) {
+        tournamentRepository.deleteById(id);
     }
 }
