@@ -4,7 +4,9 @@ import com.github.lucbui.fallapalooza.entity.Team;
 import com.github.lucbui.fallapalooza.entity.TeamMember;
 import com.github.lucbui.fallapalooza.entity.Tournament;
 import com.github.lucbui.fallapalooza.entity.User;
+import com.github.lucbui.fallapalooza.exception.InvalidSignUpException;
 import com.github.lucbui.fallapalooza.exception.TeamNotFoundException;
+import com.github.lucbui.fallapalooza.exception.TournamentNotFoundException;
 import com.github.lucbui.fallapalooza.model.team.AddTeamMemberRequest;
 import com.github.lucbui.fallapalooza.model.team.CreateTeamRequest;
 import com.github.lucbui.fallapalooza.model.team.UpdateTeamRequest;
@@ -14,6 +16,9 @@ import com.github.lucbui.fallapalooza.repository.TournamentRepository;
 import com.github.lucbui.fallapalooza.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import javax.transaction.Transactional;
+import java.time.OffsetDateTime;
 
 @Service
 public class TeamService {
@@ -34,17 +39,34 @@ public class TeamService {
      * @param request Team creation request
      * @return The created team
      */
-    public Team createTeam(CreateTeamRequest request) {
-        Tournament tProxy = tournamentRepository.getOne(request.getTournamentId());
-        Team team = new Team(request.getName(), tProxy);
+    @Transactional
+    public synchronized Team createTeam(CreateTeamRequest request) {
+        Tournament tournament = tournamentRepository.findById(request.getTournamentId())
+                .orElseThrow(() -> new TournamentNotFoundException(request.getTournamentId()));
+        OffsetDateTime now = OffsetDateTime.now();
+
+        if(tournament.getSignUpStartDate() == null || now.isBefore(tournament.getSignUpStartDate())) {
+            //throw new InvalidSignUpException("Sign-up not started");
+        } else if(tournament.getSignUpEndDate() != null && now.isAfter(tournament.getSignUpEndDate())) {
+            throw new InvalidSignUpException("Sign-up date passed");
+        }
+
+        long count = teamRepository.countTeamsByTournamentIdAndBackup(tournament.getId(), false);
+
+        Team team = new Team(request.getName(), tournament);
         team.setColor(request.getColor());
         team.setSeed(request.getSeed());
+        team.setBackup(count >= 32);
         team = teamRepository.save(team);
 
+        int numberOfActiveMembers = 0;
         for(CreateTeamRequest.CreateMemberRequest cmRequest : request.getMembers()) {
             TeamMember member = new TeamMember(team, userRepository.getOne(cmRequest.getId()));
-            member.setBackup(cmRequest.isBackup());
-            teamMemberRepository.save(member);
+            member.setBackup(numberOfActiveMembers > 2 || cmRequest.isBackup());
+            member = teamMemberRepository.save(member);
+            if(!member.isBackup()) {
+                numberOfActiveMembers++;
+            }
         }
 
         return team;
