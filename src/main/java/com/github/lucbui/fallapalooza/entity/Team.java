@@ -25,9 +25,6 @@ public class Team extends Auditable<String> {
     private String color;
     private Integer seed;
 
-    //Auto-populate by the DB?
-    private boolean backup;
-
     @NonNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "tournament_id", referencedColumnName = "id")

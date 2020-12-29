@@ -16,6 +16,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 import java.time.OffsetDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,6 +43,7 @@ public class FallapaloozaApplication {
 		return (args) -> {
 			Tournament fall = new Tournament("Fallapalooza");
 			fall.setStartDate(OffsetDateTime.now());
+			fall.setSignUpStartDate(OffsetDateTime.now().minus(10, ChronoUnit.MINUTES));
 			Tournament fallFinal = tournamentRepository.save(fall);
 
 			Round round1 = roundRepository.save(new Round(1, "Round 1", fall));

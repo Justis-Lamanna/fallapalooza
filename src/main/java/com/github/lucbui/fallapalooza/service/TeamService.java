@@ -40,23 +40,20 @@ public class TeamService {
      * @return The created team
      */
     @Transactional
-    public synchronized Team createTeam(CreateTeamRequest request) {
+    public Team createTeam(CreateTeamRequest request) {
         Tournament tournament = tournamentRepository.findById(request.getTournamentId())
                 .orElseThrow(() -> new TournamentNotFoundException(request.getTournamentId()));
         OffsetDateTime now = OffsetDateTime.now();
 
         if(tournament.getSignUpStartDate() == null || now.isBefore(tournament.getSignUpStartDate())) {
-            //throw new InvalidSignUpException("Sign-up not started");
+            throw new InvalidSignUpException("Sign-up not started");
         } else if(tournament.getSignUpEndDate() != null && now.isAfter(tournament.getSignUpEndDate())) {
             throw new InvalidSignUpException("Sign-up date passed");
         }
 
-        long count = teamRepository.countTeamsByTournamentIdAndBackup(tournament.getId(), false);
-
         Team team = new Team(request.getName(), tournament);
         team.setColor(request.getColor());
         team.setSeed(request.getSeed());
-        team.setBackup(count >= 32);
         team = teamRepository.save(team);
 
         int numberOfActiveMembers = 0;

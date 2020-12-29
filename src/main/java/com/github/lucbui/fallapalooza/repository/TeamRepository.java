@@ -15,14 +15,6 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
     List<Team> getTeamByTournamentId(long id);
 
     /**
-     * Retrieve all active (backup=false) teams
-     * @param id The tournament ID
-     * @param backup True to retrieve backups, false for actives
-     * @return The active teams
-     */
-    Long countTeamsByTournamentIdAndBackup(long id, boolean backup);
-
-    /**
      * Get a team by its seed #
      * @param tournamentId The tournament ID
      * @param seed The seed number
