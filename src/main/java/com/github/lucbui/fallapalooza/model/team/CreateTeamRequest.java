@@ -9,7 +9,6 @@ public class CreateTeamRequest {
     private long tournamentId;
     private String name;
     private String color;
-    private Integer seed;
     private List<CreateMemberRequest> members;
 
     @Data

@@ -8,6 +8,7 @@ import com.github.lucbui.fallapalooza.exception.InvalidSignUpException;
 import com.github.lucbui.fallapalooza.exception.TeamNotFoundException;
 import com.github.lucbui.fallapalooza.exception.TournamentNotFoundException;
 import com.github.lucbui.fallapalooza.model.team.AddTeamMemberRequest;
+import com.github.lucbui.fallapalooza.model.team.CreateTeamAndUserRequest;
 import com.github.lucbui.fallapalooza.model.team.CreateTeamRequest;
 import com.github.lucbui.fallapalooza.model.team.UpdateTeamRequest;
 import com.github.lucbui.fallapalooza.repository.TeamMemberRepository;
@@ -41,19 +42,10 @@ public class TeamService {
      */
     @Transactional
     public Team createTeam(CreateTeamRequest request) {
-        Tournament tournament = tournamentRepository.findById(request.getTournamentId())
-                .orElseThrow(() -> new TournamentNotFoundException(request.getTournamentId()));
-        OffsetDateTime now = OffsetDateTime.now();
-
-        if(tournament.getSignUpStartDate() == null || now.isBefore(tournament.getSignUpStartDate())) {
-            throw new InvalidSignUpException("Sign-up not started");
-        } else if(tournament.getSignUpEndDate() != null && now.isAfter(tournament.getSignUpEndDate())) {
-            throw new InvalidSignUpException("Sign-up date passed");
-        }
+        Tournament tournament = getAndValidateTournament(request.getTournamentId());
 
         Team team = new Team(request.getName(), tournament);
         team.setColor(request.getColor());
-        team.setSeed(request.getSeed());
         team = teamRepository.save(team);
 
         int numberOfActiveMembers = 0;
@@ -67,6 +59,47 @@ public class TeamService {
         }
 
         return team;
+    }
+
+    @Transactional
+    public Team createTeam(CreateTeamAndUserRequest request) {
+        Tournament tournament = getAndValidateTournament(request.getTournamentId());
+
+        Team team = new Team(request.getName(), tournament);
+        team.setColor(request.getColor());
+        team = teamRepository.save(team);
+
+        for(CreateTeamAndUserRequest.DiscordUser dId : request.getDiscordUsers()) {
+            User user = userRepository.getUserByDiscordId(dId.getDiscordId())
+                        .orElseGet(() -> new User(dId.getName()));
+            user.setName(dId.getName());
+            user.setPronouns(dId.getPronouns());
+            user.setBlurb(dId.getBlurb());
+            user.setDiscordId(dId.getDiscordId());
+            user.setTwitchId(dId.getTwitchId());
+
+            user = userRepository.save(user);
+
+            TeamMember member = new TeamMember(team, user);
+            member.setBackup(dId.isBackup());
+            teamMemberRepository.save(member);
+        }
+
+        return team;
+    }
+
+    private Tournament getAndValidateTournament(long tournamentId) {
+        Tournament tournament = tournamentRepository.findById(tournamentId)
+                .orElseThrow(() -> new TournamentNotFoundException(tournamentId));
+        OffsetDateTime now = OffsetDateTime.now();
+
+        if(tournament.getSignUpStartDate() == null || now.isBefore(tournament.getSignUpStartDate())) {
+            throw new InvalidSignUpException("Sign-up not started");
+        } else if(tournament.getSignUpEndDate() != null && now.isAfter(tournament.getSignUpEndDate())) {
+            throw new InvalidSignUpException("Sign-up date passed");
+        }
+
+        return tournament;
     }
 
     /**
