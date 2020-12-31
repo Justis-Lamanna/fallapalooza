@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 
 @Service
 public class TeamService {
@@ -68,14 +69,16 @@ public class TeamService {
         team.setColor(request.getColor());
         team = teamRepository.save(team);
 
-        for(CreateTeamAndUserRequest.DiscordUser dId : request.getDiscordUsers()) {
-            User user = userRepository.getUserByDiscordId(dId.getDiscordId())
-                        .orElseGet(() -> new User(dId.getName()));
+        for(CreateTeamAndUserRequest.UserIdentifier dId : request.getUserIdentifiers()) {
+            User user = getUserByIdType(dId).orElseGet(() -> new User(dId.getName()));
+
             user.setName(dId.getName());
             user.setPronouns(dId.getPronouns());
             user.setBlurb(dId.getBlurb());
+            user.setCrownCount(dId.getCrownCount());
             user.setDiscordId(dId.getDiscordId());
             user.setTwitchId(dId.getTwitchId());
+            user.setTwitterId(dId.getTwitterId());
 
             user = userRepository.save(user);
 
@@ -99,6 +102,15 @@ public class TeamService {
         }
 
         return tournament;
+    }
+
+    private Optional<User> getUserByIdType(CreateTeamAndUserRequest.UserIdentifier id) {
+        switch (id.getIdType()) {
+            case TWITCH: return userRepository.getUserByTwitchId(id.getTwitchId());
+            case DISCORD: return userRepository.getUserByDiscordId(id.getTwitchId());
+            case TWITTER: return userRepository.getUserByTwitterId(id.getTwitterId());
+            default: return Optional.empty();
+        }
     }
 
     /**

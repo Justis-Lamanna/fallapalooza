@@ -24,9 +24,14 @@ public class User extends Auditable<String> {
 
     private String blurb;
 
+    private Integer crownCount;
+
     @Column(unique = true)
     private String discordId;
 
     @Column(unique = true)
     private String twitchId;
+
+    @Column(unique = true)
+    private String twitterId;
 }

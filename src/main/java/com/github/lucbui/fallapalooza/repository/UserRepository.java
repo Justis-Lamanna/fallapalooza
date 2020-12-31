@@ -30,4 +30,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
      * @return The matched user, if present
      */
     Optional<User> getUserByTwitchId(String twitchId);
+
+    /**
+     * Retrieve a user by its Twitter ID
+     * @param twitterId The Twitter ID to search
+     * @return The matched user, if present
+     */
+    Optional<User> getUserByTwitterId(String twitterId);
 }

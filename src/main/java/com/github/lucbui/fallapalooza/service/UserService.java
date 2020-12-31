@@ -21,9 +21,11 @@ public class UserService {
     public User create(CreateUserRequest request) {
         User user = new User(request.getName());
         user.setPronouns(request.getPronouns());
+        user.setBlurb(request.getBlurb());
+        user.setCrownCount(request.getCrownCount());
         user.setTwitchId(request.getTwitchId());
         user.setDiscordId(request.getDiscordId());
-        user.setBlurb(request.getBlurb());
+        user.setTwitterId(request.getTwitterId());
         return userRepository.save(user);
     }
 
@@ -37,8 +39,8 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(request.getId()));
         user.setName(request.getName());
         user.setPronouns(request.getPronouns());
-        user.setDiscordId(request.getDiscordId());
         user.setBlurb(request.getBlurb());
+        user.setCrownCount(request.getCrownCount());
         return userRepository.save(user);
     }
 }

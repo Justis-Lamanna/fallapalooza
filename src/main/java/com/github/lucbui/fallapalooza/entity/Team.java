@@ -11,7 +11,10 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @ToString(callSuper = true, exclude = "tournament")
 @Table(
-        uniqueConstraints = @UniqueConstraint(columnNames = {"tournament_id", "seed"})
+        uniqueConstraints = {
+                @UniqueConstraint(columnNames = {"tournament_id", "seed"}),
+                @UniqueConstraint(columnNames = {"tournament_id", "name"})
+        }
 )
 public class Team extends Auditable<String> {
     @Id
@@ -22,8 +25,12 @@ public class Team extends Auditable<String> {
     @NonNull
     @Column(nullable = false)
     private String name;
+
     private String color;
+
     private Integer seed;
+
+    private String preferredRegion;
 
     @NonNull
     @ManyToOne(optional = false)

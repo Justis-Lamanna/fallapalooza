@@ -1,13 +1,16 @@
 package com.github.lucbui.fallapalooza;
 
-import com.github.lucbui.fallapalooza.entity.Round;
+import com.github.javafaker.Faker;
 import com.github.lucbui.fallapalooza.entity.Team;
 import com.github.lucbui.fallapalooza.entity.Tournament;
 import com.github.lucbui.fallapalooza.entity.User;
 import com.github.lucbui.fallapalooza.model.team.CreateTeamRequest;
-import com.github.lucbui.fallapalooza.repository.*;
+import com.github.lucbui.fallapalooza.model.tournament.QuickCreateTournamentRequest;
+import com.github.lucbui.fallapalooza.repository.RoundRepository;
+import com.github.lucbui.fallapalooza.repository.ScoreRepository;
+import com.github.lucbui.fallapalooza.repository.UserRepository;
 import com.github.lucbui.fallapalooza.service.TeamService;
-import org.apache.commons.lang3.RandomStringUtils;
+import com.github.lucbui.fallapalooza.service.TournamentService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -17,15 +20,14 @@ import org.springframework.context.annotation.Bean;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @SpringBootApplication
 public class FallapaloozaApplication {
 	private static final Logger LOGGER = LoggerFactory.getLogger(FallapaloozaApplication.class);
+	private static final Faker FAKER = new Faker();
 
 	public static void main(String[] args) {
 		SpringApplication.run(FallapaloozaApplication.class, args);
@@ -33,37 +35,34 @@ public class FallapaloozaApplication {
 
 	@Bean
 	public CommandLineRunner demo(
+			TournamentService tournamentService,
 			TeamService teamService,
-			TournamentRepository tournamentRepository,
-			TeamMemberRepository teamMemberRepository,
-			TeamRepository teamRepository,
 			UserRepository userRepository,
 			RoundRepository roundRepository,
 			ScoreRepository scoreRepository) {
 		return (args) -> {
-			Tournament fall = new Tournament("Fallapalooza");
-			fall.setStartDate(OffsetDateTime.now());
-			fall.setSignUpStartDate(OffsetDateTime.now().minus(10, ChronoUnit.MINUTES));
-			Tournament fallFinal = tournamentRepository.save(fall);
 
-			Round round1 = roundRepository.save(new Round(1, "Round 1", fall));
-			Round round2 = roundRepository.save(new Round(2, "Round 2", fall));
-			Round round3 = roundRepository.save(new Round(3, "Quarterfinals", fall));
-			Round round4 = roundRepository.save(new Round(4, "Semifinals", fall));
-			Round round5 = roundRepository.save(new Round(5, "Finals", fall));
+			QuickCreateTournamentRequest qctr = new QuickCreateTournamentRequest();
+			qctr.setName("Fallapalooza");
+			qctr.setSignUpStartDate(OffsetDateTime.now().minus(10, ChronoUnit.MINUTES));
+			qctr.setStartDate(OffsetDateTime.now().plus(5, ChronoUnit.DAYS));
+			Tournament fallFinal = tournamentService.createStandard(qctr);
 
 			List<User> users = IntStream.range(0, 100)
-					.mapToObj(x -> userRepository.save(new User(RandomStringUtils.randomAlphabetic(6, 15))))
+					.mapToObj(x -> userRepository.save(new User(FAKER.name().username())))
 					.collect(Collectors.toList());
 
 			Collections.shuffle(users);
 			List<User> parallelSafeUsers = Collections.synchronizedList(users);
 
+			Set<String> existingTeamNames = Collections.synchronizedSet(new HashSet<>(40));
+
 			List<Team> teams = IntStream.range(0, 40)
 					.parallel()
 					.mapToObj(x -> {
+						String teamName = "Team " + x;
 						CreateTeamRequest ctr = new CreateTeamRequest();
-						ctr.setName(RandomStringUtils.randomAlphabetic(10, 30));
+						ctr.setName(teamName);
 						ctr.setTournamentId(fallFinal.getId());
 						List<CreateTeamRequest.CreateMemberRequest> cmrs = new ArrayList<>();
 						CreateTeamRequest.CreateMemberRequest cmr1 = new CreateTeamRequest.CreateMemberRequest();
@@ -73,7 +72,7 @@ public class FallapaloozaApplication {
 						cmr2.setId(parallelSafeUsers.remove(0).getId());
 						cmrs.add(cmr2);
 						ctr.setMembers(cmrs);
-						return teamService.createTeam(ctr);
+						return teamService.create(ctr);
 					})
 					.collect(Collectors.toList());
 
