@@ -75,8 +75,4 @@ public class TournamentService {
         t.setEndDate(request.getEndDate());
         return tournamentRepository.save(t);
     }
-
-    public void delete(long id) {
-        tournamentRepository.deleteById(id);
-    }
 }

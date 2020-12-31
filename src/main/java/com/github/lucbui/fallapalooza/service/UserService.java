@@ -41,12 +41,4 @@ public class UserService {
         user.setBlurb(request.getBlurb());
         return userRepository.save(user);
     }
-
-    /**
-     * Delete a user
-     * @param id The user ID
-     */
-    public void delete(long id) {
-        userRepository.deleteById(id);
-    }
 }
