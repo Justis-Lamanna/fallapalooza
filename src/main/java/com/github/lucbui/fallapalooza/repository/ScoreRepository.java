@@ -9,33 +9,33 @@ import java.util.Optional;
 public interface ScoreRepository extends CrudRepository<Score, Long> {
     /**
      * Get a single score given a round, member, and episode
-     * @param roundId The round ID
+     * @param matchupId The match ID
      * @param memberId The member ID
      * @param episode The episode ID
      * @return The score, if present
      */
-    Optional<Score> getScoreByRoundIdAndTeamMemberIdAndEpisode(long roundId, long memberId, int episode);
+    Optional<Score> getScoreByMatchupIdAndTeamMemberIdAndEpisode(long matchupId, long memberId, int episode);
 
     /**
      * Get the scores for a given round and member
-     * @param roundId The round ID
+     * @param matchupId The match ID
      * @param memberId The member ID
      * @return All scores for that round
      */
-    List<Score> getScoreByRoundIdAndTeamMemberId(long roundId, long memberId);
+    List<Score> getScoreByMatchupIdAndTeamMemberId(long matchupId, long memberId);
 
     /**
      * Get the scores for everyone in this round
-     * @param roundId The round ID
+     * @param matchupId The match ID
      * @return All scores for that round
      */
-    List<Score> getScoreByRoundId(long roundId);
+    List<Score> getScoreByMatchupId(long matchupId);
 
     /**
      * Get the scores for this entire team in this entire round
-     * @param roundId The round ID
+     * @param matchupId The match ID
      * @param teamId The team ID
      * @return All scores from this round for this team
      */
-    List<Score> getScoreByRoundIdAndTeamMemberTeamId(long roundId, long teamId);
+    List<Score> getScoreByMatchupIdAndTeamMemberTeamId(long matchupId, long teamId);
 }

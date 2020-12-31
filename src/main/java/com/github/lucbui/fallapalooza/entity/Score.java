@@ -9,9 +9,9 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @RequiredArgsConstructor
-@ToString(callSuper = true, exclude = {"round", "teamMember"})
+@ToString(callSuper = true, exclude = {"matchup", "teamMember"})
 @Table(
-        uniqueConstraints = @UniqueConstraint(columnNames = {"round_id", "member_id", "episode"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"matchup_id", "member_id", "episode"})
 )
 public class Score extends Auditable<String> {
     @Id
@@ -21,8 +21,8 @@ public class Score extends Auditable<String> {
 
     @NonNull
     @ManyToOne(optional = false)
-    @JoinColumn(name = "round_id", referencedColumnName = "id")
-    private Round round;
+    @JoinColumn(name = "matchup_id", referencedColumnName = "id")
+    private Matchup matchup;
 
     @NonNull
     @ManyToOne(optional = false)
