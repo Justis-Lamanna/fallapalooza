@@ -30,7 +30,8 @@ public class Team extends Auditable<String> {
 
     private Integer seed;
 
-    private String preferredRegion;
+    @Enumerated(EnumType.ORDINAL)
+    private Region preferredRegion;
 
     @NonNull
     @ManyToOne(optional = false)

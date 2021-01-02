@@ -3,7 +3,6 @@ package com.github.lucbui.fallapalooza.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.time.OffsetDateTime;
 
 @Entity
 @Getter
@@ -26,11 +25,8 @@ public class Round extends Auditable<String> {
     @NonNull
     private String name;
 
-    @Column(name = "start_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private OffsetDateTime startDate;
-
-    @Column(name = "end_date", columnDefinition = "TIMESTAMP WITH TIME ZONE")
-    private OffsetDateTime endDate;
+    @Column(name = "final_round")
+    private boolean finalRound;
 
     @NonNull
     @ManyToOne(optional = false)

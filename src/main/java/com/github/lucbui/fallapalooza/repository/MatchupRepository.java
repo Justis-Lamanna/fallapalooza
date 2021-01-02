@@ -29,4 +29,12 @@ public interface MatchupRepository extends JpaRepository<Matchup, Long> {
             "WHERE (t1.id = :teamOneId AND t2.id = :teamTwoId) " +
             "OR (t1.id = :teamTwoId AND t2.id = :teamOneId)")
     Optional<Matchup> getMatchupByTeamOneIdAndTeamTwoId(long teamOneId, long teamTwoId);
+
+    /**
+     * Get the matchupOrder'th matchup of the round
+     * @param previousMatchupId The previous matchup ID
+     * @return The Matchup, if present
+     */
+    @Query("SELECT m FROM Matchup m JOIN m.previousMatchupTeamOne mp1 JOIN m.previousMatchupTeamTwo mp2 WHERE mp1.id = :previousMatchupId OR mp2.id = :previousMatchupId")
+    Optional<Matchup> getMatchupByPreviousMatchupId(long previousMatchupId);
 }

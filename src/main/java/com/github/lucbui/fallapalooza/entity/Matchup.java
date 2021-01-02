@@ -26,8 +26,7 @@ public class Matchup extends Auditable<String> {
     @Column(name = "matchup_order")
     private int matchupOrder;
 
-    @NonNull
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "team_one_id", referencedColumnName = "id")
     private Team teamOne;
 
@@ -35,8 +34,7 @@ public class Matchup extends Auditable<String> {
     @JoinColumn(name = "team_one_previous_matchup_id", referencedColumnName = "id")
     private Matchup previousMatchupTeamOne;
 
-    @NonNull
-    @ManyToOne(optional = false)
+    @ManyToOne
     @JoinColumn(name = "team_two_id", referencedColumnName = "id")
     private Team teamTwo;
 

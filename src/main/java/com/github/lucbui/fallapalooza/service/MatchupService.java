@@ -3,6 +3,7 @@ package com.github.lucbui.fallapalooza.service;
 import com.github.lucbui.fallapalooza.entity.Matchup;
 import com.github.lucbui.fallapalooza.entity.Round;
 import com.github.lucbui.fallapalooza.entity.Team;
+import com.github.lucbui.fallapalooza.exception.MatchupNotFoundException;
 import com.github.lucbui.fallapalooza.exception.MisconfiguredTournamentException;
 import com.github.lucbui.fallapalooza.exception.TeamNotFoundException;
 import com.github.lucbui.fallapalooza.model.matchup.InitializeMatchupRequest;
@@ -18,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class MatchupService {
@@ -32,8 +34,9 @@ public class MatchupService {
 
     @Transactional
     public List<Matchup> initializeMatchups(InitializeMatchupRequest request) {
-        List<Matchup> created = new ArrayList<>(16);
-        Round initialRound = getFirstRoundForTournament(request.getTournamentId());
+        List<Round> rounds = getRounds(request.getTournamentId());
+
+        List<Matchup> created = new ArrayList<>(2 << rounds.size());
 
         int index = 0;
         for(Seeds.Seed seed : request.getSeeds()) {
@@ -41,21 +44,48 @@ public class MatchupService {
                     .orElseThrow(() -> new TeamNotFoundException(seed.getTeamOne()));
             Team two = teamRepository.getTeamByTournamentIdAndSeed(request.getTournamentId(), seed.getTeamTwo())
                     .orElseThrow(() -> new TeamNotFoundException(seed.getTeamOne()));
-            Matchup matchup = new Matchup(one, two, initialRound);
-            matchup.setMatchupOrder(index++);
+            Matchup matchup = new Matchup(rounds.get(0));
+            matchup.setTeamOne(one); matchup.setTeamTwo(two); matchup.setMatchupOrder(index++);
             created.add(matchup);
+        }
+
+        List<Matchup> previous = created;
+        for(int idx = 1; idx < rounds.size(); idx++) {
+            previous = createMatchupForRound(rounds.get(idx), previous);
+            created.addAll(previous);
         }
 
         return matchupRepository.saveAll(created);
     }
 
-    private Round getFirstRoundForTournament(long tournamentId) {
+    private List<Round> getRounds(long tournamentId) {
         List<Round> rounds = roundRepository.getRoundByTournamentId(tournamentId).stream()
                 .sorted(Comparator.comparing(Round::getNumber))
                 .collect(Collectors.toList());
         if(rounds.isEmpty()) {
             throw new MisconfiguredTournamentException("Tournament with ID " + tournamentId + " has no rounds set up.");
         }
-        return rounds.get(0);
+        return rounds;
+    }
+
+    private List<Matchup> createMatchupForRound(Round round, List<Matchup> previous) {
+        int numberOfMatchups = 1 << (4 - round.getNumber());
+        return IntStream.range(0, numberOfMatchups)
+            .mapToObj(matchupNum -> {
+                Matchup matchup = new Matchup(round);
+                matchup.setMatchupOrder(matchupNum);
+                matchup.setPreviousMatchupTeamOne(previous.get(2 * matchupNum));
+                matchup.setPreviousMatchupTeamTwo(previous.get(2 * matchupNum + 1));
+                return matchup;
+            })
+            .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public Matchup setWinner(long matchupId, Matchup.Winner winner) {
+        Matchup matchup = matchupRepository.findById(matchupId)
+                .orElseThrow(() -> new MatchupNotFoundException(matchupId));
+        matchup.setWinner(winner);
+        return matchupRepository.save(matchup);
     }
 }
