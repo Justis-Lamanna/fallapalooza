@@ -11,6 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Service
 public class TournamentService {
@@ -32,11 +35,13 @@ public class TournamentService {
         t.setStartDate(request.getStartDate());
         t.setSignUpStartDate(request.getSignUpStartDate());
         t.setSignUpEndDate(request.getSignUpEndDate());
-        t = tournamentRepository.save(t);
+        Tournament fT = tournamentRepository.save(t);
 
-        for(int i = 0; i < 5; i++) {
-            roundRepository.save(new Round(i, getRoundByIndex(i), t));
-        }
+        List<Round> rounds = IntStream.range(0, 5)
+                .mapToObj(i -> new Round(i, getRoundByIndex(i), fT))
+                .collect(Collectors.toList());
+
+        roundRepository.saveAll(rounds);
 
         return t;
     }

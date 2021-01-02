@@ -22,5 +22,11 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
      */
     Optional<Team> getTeamByTournamentIdAndSeed(long tournamentId, int seed);
 
-    
+    /**
+     * Get a team by its name
+     * @param tournamentId The tournament ID
+     * @param name The team name
+     * @return The team
+     */
+    Optional<Team> getTeamByTournamentIdAndName(long tournamentId, String name);
 }

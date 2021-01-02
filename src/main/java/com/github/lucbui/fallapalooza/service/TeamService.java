@@ -46,6 +46,7 @@ public class TeamService {
 
         Team team = new Team(request.getName(), tournament);
         team.setColor(request.getColor());
+        team.setSeed(request.getSeed());
         team = teamRepository.save(team);
 
         int numberOfActiveMembers = 0;

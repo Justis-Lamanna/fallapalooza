@@ -19,6 +19,8 @@ public class CreateTeamRequest {
 
     @Size(min = 2, message = "Must have at least two members to a team")
     private List<CreateMemberRequest> members;
+    
+    private Integer seed;
 
     @Data
     public static class CreateMemberRequest {
