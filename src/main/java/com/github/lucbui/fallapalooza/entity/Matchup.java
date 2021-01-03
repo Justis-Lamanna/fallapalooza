@@ -3,6 +3,7 @@ package com.github.lucbui.fallapalooza.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.time.OffsetDateTime;
 
 @Entity
 @Getter
@@ -50,6 +51,12 @@ public class Matchup extends Auditable<String> {
     @NonNull
     @Enumerated(EnumType.ORDINAL)
     private Winner winner = Winner.UNDECIDED;
+
+    @Column(name = "start_date", columnDefinition = "TIMESTAMP")
+    private OffsetDateTime startDate;
+
+    @Column(name = "end_date", columnDefinition = "TIMESTAMP")
+    private OffsetDateTime endDate;
 
     public enum Winner {
         UNDECIDED,

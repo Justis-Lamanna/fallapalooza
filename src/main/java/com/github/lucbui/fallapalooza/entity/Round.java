@@ -25,9 +25,6 @@ public class Round extends Auditable<String> {
     @NonNull
     private String name;
 
-    @Column(name = "final_round")
-    private boolean finalRound;
-
     @NonNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "tournament_id", referencedColumnName = "id")
