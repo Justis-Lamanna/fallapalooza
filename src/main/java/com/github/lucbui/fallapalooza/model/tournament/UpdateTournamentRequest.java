@@ -2,14 +2,14 @@ package com.github.lucbui.fallapalooza.model.tournament;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 
 @Data
 public class UpdateTournamentRequest {
-    private long id;
+    @NotNull
+    private Long id;
 
-    @NotBlank(message = "Must provide Tournament name")
     private String name;
 
     private OffsetDateTime signUpStartDate;

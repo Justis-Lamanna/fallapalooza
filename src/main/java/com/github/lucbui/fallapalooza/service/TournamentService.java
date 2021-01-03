@@ -65,11 +65,29 @@ public class TournamentService {
     public Tournament update(UpdateTournamentRequest request) {
         Tournament t = tournamentRepository.findById(request.getId())
                 .orElseThrow(() -> new TournamentNotFoundException(request.getId()));
-        t.setName(request.getName());
-        t.setSignUpStartDate(request.getSignUpStartDate());
-        t.setSignUpEndDate(request.getSignUpEndDate());
-        t.setStartDate(request.getStartDate());
-        t.setEndDate(request.getEndDate());
+        if(request.getName() != null) { t.setName(request.getName()); }
+        if(request.getSignUpStartDate() != null) { t.setSignUpStartDate(request.getSignUpStartDate()); }
+        if(request.getSignUpEndDate() != null) { t.setSignUpEndDate(request.getSignUpEndDate()); }
+        if(request.getStartDate() != null) { t.setStartDate(request.getStartDate()); }
+        if(request.getEndDate() != null) { t.setEndDate(request.getEndDate()); }
         return tournamentRepository.save(t);
+    }
+
+    /**
+     * Get a tournament by its ID
+     * @param id The tournament ID
+     * @return The tournament
+     */
+    public Tournament getTournamentById(long id) {
+        return tournamentRepository.findById(id)
+                .orElseThrow(() -> new TournamentNotFoundException(id));
+    }
+
+    /**
+     * Get all tournaments
+     * @return All tournaments
+     */
+    public List<Tournament> getAllTournaments() {
+        return tournamentRepository.findAll();
     }
 }

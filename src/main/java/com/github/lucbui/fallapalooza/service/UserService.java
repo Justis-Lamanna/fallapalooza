@@ -7,6 +7,8 @@ import com.github.lucbui.fallapalooza.model.user.CreateUserRequest;
 import com.github.lucbui.fallapalooza.model.user.UpdateUserRequest;
 import com.github.lucbui.fallapalooza.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -38,11 +40,11 @@ public class UserService {
      */
     public User update(UpdateUserRequest request) {
         User user = getById(request.getId());
-        user.setName(request.getName());
-        user.setPronouns(request.getPronouns());
-        user.setBlurb(request.getBlurb());
-        user.setCrownCount(request.getCrownCount());
-        user.setTwitterId(request.getTwitterId());
+        if(request.getName() != null) { user.setName(request.getName()); }
+        if(request.getPronouns() != null) { user.setPronouns(request.getPronouns()); }
+        if(request.getBlurb() != null) { user.setBlurb(request.getBlurb()); }
+        if(request.getCrownCount() != null) { user.setCrownCount(request.getCrownCount()); }
+        if(request.getTwitterId() != null) { user.setTwitterId(request.getTwitterId()); }
         return userRepository.save(user);
     }
 
@@ -73,5 +75,9 @@ public class UserService {
             default: user = Optional.empty();
         }
         return user.orElseThrow(() -> new UserNotFoundException(id, idType));
+    }
+
+    public Page<User> getUsersWithPageable(Pageable pageable) {
+        return userRepository.findAll(pageable);
     }
 }

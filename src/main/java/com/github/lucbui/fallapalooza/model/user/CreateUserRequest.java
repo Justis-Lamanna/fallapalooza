@@ -23,6 +23,5 @@ public class CreateUserRequest {
     @NotBlank(message = "Twitch ID must be provided")
     private String twitchId;
 
-    @NotBlank(message = "Twitter ID must be provided")
     private String twitterId;
 }

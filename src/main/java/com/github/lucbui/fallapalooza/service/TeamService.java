@@ -71,14 +71,12 @@ public class TeamService {
         team = teamRepository.save(team);
 
         for(CreateTeamAndUserRequest.UserIdentifier dId : request.getUserIdentifiers()) {
-            User user = getUserByIdType(dId).orElseGet(() -> new User(dId.getName()));
+            User user = getUserByIdType(dId).orElseGet(() -> new User(dId.getName(), dId.getTwitchId(), dId.getDiscordId()));
 
             user.setName(dId.getName());
             user.setPronouns(dId.getPronouns());
             user.setBlurb(dId.getBlurb());
             user.setCrownCount(dId.getCrownCount());
-            user.setDiscordId(dId.getDiscordId());
-            user.setTwitchId(dId.getTwitchId());
             user.setTwitterId(dId.getTwitterId());
 
             user = userRepository.save(user);

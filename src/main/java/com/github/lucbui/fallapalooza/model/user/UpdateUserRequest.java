@@ -2,14 +2,14 @@ package com.github.lucbui.fallapalooza.model.user;
 
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 @Data
 public class UpdateUserRequest {
-    private long id;
+    @NotNull
+    private Long id;
 
-    @NotBlank(message = "User name must be provided")
     private String name;
 
     private String pronouns;
