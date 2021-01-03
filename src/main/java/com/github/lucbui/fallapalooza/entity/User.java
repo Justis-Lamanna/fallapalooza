@@ -26,9 +26,11 @@ public class User extends Auditable<String> {
 
     private Integer crownCount;
 
+    @NonNull
     @Column(unique = true)
     private String discordId;
 
+    @NonNull
     @Column(unique = true)
     private String twitchId;
 

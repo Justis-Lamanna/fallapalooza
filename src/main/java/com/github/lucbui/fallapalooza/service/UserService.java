@@ -22,12 +22,10 @@ public class UserService {
      * @return The created user
      */
     public User create(CreateUserRequest request) {
-        User user = new User(request.getName());
+        User user = new User(request.getName(), request.getDiscordId(), request.getTwitchId());
         user.setPronouns(request.getPronouns());
         user.setBlurb(request.getBlurb());
         user.setCrownCount(request.getCrownCount());
-        user.setTwitchId(request.getTwitchId());
-        user.setDiscordId(request.getDiscordId());
         user.setTwitterId(request.getTwitterId());
         return userRepository.save(user);
     }
@@ -44,6 +42,7 @@ public class UserService {
         user.setPronouns(request.getPronouns());
         user.setBlurb(request.getBlurb());
         user.setCrownCount(request.getCrownCount());
+        user.setTwitterId(request.getTwitterId());
         return userRepository.save(user);
     }
 

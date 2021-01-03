@@ -18,4 +18,6 @@ public class UpdateUserRequest {
 
     @PositiveOrZero(message = "Crown Count must be non-negative")
     private Integer crownCount;
+
+    private String twitterId;
 }
