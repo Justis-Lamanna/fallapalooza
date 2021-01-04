@@ -1,8 +1,10 @@
 package com.github.lucbui.fallapalooza.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,5 +38,9 @@ public class Team extends Auditable<String> {
     @NonNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "tournament_id", referencedColumnName = "id")
+    @JsonIgnore
     private Tournament tournament;
+
+    @OneToMany(mappedBy = "team")
+    private List<TeamMember> members;
 }

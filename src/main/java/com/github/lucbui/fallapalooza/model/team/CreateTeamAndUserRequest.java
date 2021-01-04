@@ -1,16 +1,15 @@
 package com.github.lucbui.fallapalooza.model.team;
 
+import com.github.lucbui.fallapalooza.entity.Region;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.List;
 
 @Data
 public class CreateTeamAndUserRequest {
-    private long tournamentId;
+    @NotNull
+    private Long tournamentId;
 
     @NotBlank(message = "Must provide Team Name")
     private String name;
@@ -18,15 +17,19 @@ public class CreateTeamAndUserRequest {
     @Pattern(regexp = "#[0-9]{6}", message = "Color must be in #xxxxxx format")
     private String color;
 
+    private Region preferredRegion;
+
+    private Integer seed;
+
     @Size(min = 2, message = "Must have at least two members to a team")
     private List<UserIdentifier> userIdentifiers;
 
     @Data
     public static class UserIdentifier {
-        private IdType idType;
-
+        @NotBlank(message = "Discord ID must be present")
         private String discordId;
 
+        @NotBlank(message = "Twitch ID must be present")
         private String twitchId;
 
         private String twitterId;

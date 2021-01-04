@@ -21,7 +21,7 @@ public class UserController {
 
     @GetMapping
     public Page<User> getUsers(@PageableDefault(20) Pageable pageable) {
-        return userService.getUsersWithPageable(pageable);
+        return userService.getByPageable(pageable);
     }
 
     @GetMapping("/{id}")

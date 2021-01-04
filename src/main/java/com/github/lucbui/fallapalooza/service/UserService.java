@@ -77,7 +77,12 @@ public class UserService {
         return user.orElseThrow(() -> new UserNotFoundException(id, idType));
     }
 
-    public Page<User> getUsersWithPageable(Pageable pageable) {
+    /**
+     * Retrieve users using a Pageable
+     * @param pageable The pageable to use
+     * @return The requested page of users
+     */
+    public Page<User> getByPageable(Pageable pageable) {
         return userRepository.findAll(pageable);
     }
 }

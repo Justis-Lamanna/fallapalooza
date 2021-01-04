@@ -15,6 +15,8 @@ import com.github.lucbui.fallapalooza.repository.TeamRepository;
 import com.github.lucbui.fallapalooza.repository.TournamentRepository;
 import com.github.lucbui.fallapalooza.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -68,6 +70,8 @@ public class TeamService {
 
         Team team = new Team(request.getName(), tournament);
         team.setColor(request.getColor());
+        team.setPreferredRegion(request.getPreferredRegion());
+        team.setSeed(request.getSeed());
         team = teamRepository.save(team);
 
         for(CreateTeamAndUserRequest.UserIdentifier dId : request.getUserIdentifiers()) {
@@ -104,12 +108,7 @@ public class TeamService {
     }
 
     private Optional<User> getUserByIdType(CreateTeamAndUserRequest.UserIdentifier id) {
-        switch (id.getIdType()) {
-            case TWITCH: return userRepository.getUserByTwitchId(id.getTwitchId());
-            case DISCORD: return userRepository.getUserByDiscordId(id.getTwitchId());
-            case TWITTER: return userRepository.getUserByTwitterId(id.getTwitterId());
-            default: return Optional.empty();
-        }
+        return userRepository.getUserByDiscordId(id.getTwitchId());
     }
 
     /**
@@ -118,11 +117,30 @@ public class TeamService {
      * @return The updated team
      */
     public Team update(UpdateTeamRequest request) {
-        Team team = teamRepository.findById(request.getTeamId())
-                .orElseThrow(() -> new TeamNotFoundException(request.getTeamId()));
-        team.setName(request.getName());
-        team.setSeed(request.getSeed());
-        team.setColor(request.getColor());
+        Team team = getById(request.getTeamId());
+        if (request.getName() != null) { team.setName(request.getName()); }
+        if (request.getSeed() != null) { team.setSeed(request.getSeed()); }
+        if (request.getColor() != null) { team.setColor(request.getColor()); }
+        if (request.getPreferredRegion() != null) { team.setPreferredRegion(request.getPreferredRegion()); }
         return teamRepository.save(team);
+    }
+
+    /**
+     * Get a team by their ID
+     * @param id The team ID
+     * @return The team
+     */
+    public Team getById(long id) {
+        return teamRepository.findById(id)
+                .orElseThrow(() -> new TeamNotFoundException(id));
+    }
+
+    /**
+     * Retrieve teams by a pageable
+     * @param pageable The pageable to use
+     * @return The requested page of teams
+     */
+    public Page<Team> getByPageable(Pageable pageable) {
+        return teamRepository.findAll(pageable);
     }
 }
