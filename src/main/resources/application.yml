@@ -1,0 +1,27 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+
+api:
+  pageable: >
+    SpringFox's API doesn't handle Pageables correctly. Here is the correct usage:\n\
+    page: The page number to retrieve (default is page 0)\n\
+    size: The size of the page (default is 20)\n\
+    sort: <Optional> The field to sort on. To perform multiple sorts, use multiples of these attributes. \
+    To specify descending order, add ',desc' to the sort field.\n\
+    Example: http://localhost:8080/api?page=1&size=25&sort=name,desc
+  updateAsPatch: Null fields will not be updated (left the same)
+  common:
+    createdBy: User who created this entry in the DB
+    createdDate: Datetime this entry was created in the DB
+    lastModifiedBy: User who last modified this entry in the DB
+    lastModifiedDate: Datetime this entry was last modified in the DB
+  user:
+    id: The user's ID
+    name: The user's display name
+    pronouns: The user's preferred pronouns
+    blurb: Summary of the user's achievements
+    crownCount: The number of crowns the user has at signup
+    discordId: The user's Discord ID. Expected to be in the format <discord-name>#<four-digit id>
+    twitchId: The user's Twitch ID. Expected to be their Twitch username
+    twitterId: The user's Twitter ID. Expected to be their Twitter handle (no @)

@@ -1,5 +1,6 @@
 package com.github.lucbui.fallapalooza.entity;
 
+import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -16,18 +17,22 @@ import java.time.LocalDateTime;
 public abstract class Auditable<U> {
     @CreatedBy
     @Column(name = "created_by")
+    @ApiModelProperty("${api.common.createdBy}")
     private U createdBy;
 
     @CreatedDate
     @Column(name = "created_date", columnDefinition = "TIMESTAMP")
+    @ApiModelProperty("${api.common.createdDate}")
     private LocalDateTime createdDate;
 
     @LastModifiedBy
     @Column(name = "last_modified_by")
+    @ApiModelProperty("${api.common.lastModifiedBy}")
     private U lastModifiedBy;
 
     @LastModifiedDate
     @Column(name = "last_modified_date", columnDefinition = "TIMESTAMP")
+    @ApiModelProperty("${api.common.lastModifiedDate}")
     private LocalDateTime lastModifiedDate;
 
     public U getCreatedBy() {
