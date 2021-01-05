@@ -153,4 +153,13 @@ public class TeamService {
     public List<Team> getByTournamentId(long tournamentId) {
         return teamRepository.getTeamByTournamentId(tournamentId);
     }
+
+    /**
+     * Get the active teams (first 32 signed-up teams)
+     * @param tournamentId The tournament ID
+     * @return The teams
+     */
+    public List<Team> getActiveTeamsByTournamentId(long tournamentId) {
+        return teamRepository.getFirst32ByTournamentIdOrderByCreatedDateAsc(tournamentId);
+    }
 }

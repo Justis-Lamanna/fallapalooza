@@ -8,6 +8,7 @@ import com.github.lucbui.fallapalooza.exception.MisconfiguredTournamentException
 import com.github.lucbui.fallapalooza.exception.TeamNotFoundException;
 import com.github.lucbui.fallapalooza.model.matchup.InitializeMatchupRequest;
 import com.github.lucbui.fallapalooza.model.matchup.Seeds;
+import com.github.lucbui.fallapalooza.model.matchup.UpdateMatchupRequest;
 import com.github.lucbui.fallapalooza.repository.MatchupRepository;
 import com.github.lucbui.fallapalooza.repository.RoundRepository;
 import com.github.lucbui.fallapalooza.repository.TeamRepository;
@@ -81,11 +82,25 @@ public class MatchupService {
             .collect(Collectors.toList());
     }
 
-    @Transactional
-    public Matchup setWinner(long matchupId, Matchup.Winner winner) {
-        Matchup matchup = matchupRepository.findById(matchupId)
-                .orElseThrow(() -> new MatchupNotFoundException(matchupId));
-        matchup.setWinner(winner);
+    public Matchup updateMatchup(UpdateMatchupRequest request) {
+        Matchup matchup = matchupRepository.findById(request.getMatchupId())
+                .orElseThrow(() -> new MatchupNotFoundException(request.getMatchupId()));
+        if ( request.getMatchupOrder() != null) { matchup.setMatchupOrder(request.getMatchupOrder());}
+        if ( request.getWinner() != null ) { matchup.setWinner(request.getWinner()); }
+        if ( request.getStartDate() != null) { matchup.setStartDate(request.getStartDate()); }
+        if (request.getEndDate() != null) { matchup.setEndDate(request.getEndDate()); }
         return matchupRepository.save(matchup);
+    }
+
+    public List<Matchup> getMatchups() {
+        return matchupRepository.findAll();
+    }
+
+    public List<Matchup> getMatchupsForTournament(long id) {
+        return matchupRepository.getMatchupByRoundTournamentId(id);
+    }
+
+    public List<Matchup> getMatchupsForRound(long id) {
+        return matchupRepository.getMatchupByRoundId(id);
     }
 }

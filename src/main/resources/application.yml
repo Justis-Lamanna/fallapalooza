@@ -41,3 +41,16 @@ api:
   teamMember:
     id: The team member's ID
     backup: Boolean indicating if this is a backup team member
+  matchup:
+    id: The matchup ID
+    matchupOrder: The order of the matchup on the bracket
+    teamOne: The first team competing (only present for first round)
+    teamOneSeed: The seed of the first team
+    teamTwo: The second team competing (only present for first round)
+    teamTwoSeed: The seed of the second team
+    previousMatchupTeamOne: The prior matchup, which determined team one (only present for later rounds)
+    previousMatchupTeamTwo: The prior matchup, which determined team two (only present for later rounds)
+    round: The round this occured in
+    winner: The winner of this round
+    startDate: The date and time this match started
+    endDate: The date and time this match ended

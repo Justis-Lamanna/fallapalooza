@@ -1,9 +1,12 @@
 package com.github.lucbui.fallapalooza;
 
 import com.github.javafaker.Faker;
+import com.github.lucbui.fallapalooza.entity.Matchup;
 import com.github.lucbui.fallapalooza.entity.Team;
 import com.github.lucbui.fallapalooza.entity.Tournament;
 import com.github.lucbui.fallapalooza.entity.User;
+import com.github.lucbui.fallapalooza.model.matchup.InitializeMatchupRequest;
+import com.github.lucbui.fallapalooza.model.matchup.Seeds;
 import com.github.lucbui.fallapalooza.model.team.CreateTeamRequest;
 import com.github.lucbui.fallapalooza.model.tournament.QuickCreateTournamentRequest;
 import com.github.lucbui.fallapalooza.model.user.CreateUserRequest;
@@ -82,16 +85,16 @@ public class FallapaloozaApplication {
 						return teamService.create(ctr);
 					})
 					.collect(Collectors.toList());
-//
-//			InitializeMatchupRequest imr = IntStream.range(0, 16)
-//					.mapToObj(x -> new Seeds.Seed(2 * x, (2 * x) + 1)).collect(Collectors.collectingAndThen(Collectors.toList(), seeds -> {
-//						InitializeMatchupRequest i = new InitializeMatchupRequest();
-//						i.setTournamentId(fallFinal.getId());
-//						i.setSeeds(new Seeds(seeds));
-//						return i;
-//					}));
-//
-//			List<Matchup> matchups = matchupService.initializeMatchups(imr);
+
+			InitializeMatchupRequest imr = IntStream.range(0, 16)
+					.mapToObj(x -> new Seeds.Seed(2 * x, (2 * x) + 1)).collect(Collectors.collectingAndThen(Collectors.toList(), seeds -> {
+						InitializeMatchupRequest i = new InitializeMatchupRequest();
+						i.setTournamentId(fallFinal.getId());
+						i.setSeeds(new Seeds(seeds));
+						return i;
+					}));
+
+			List<Matchup> matchups = matchupService.initializeMatchups(imr);
 		};
 	}
 }

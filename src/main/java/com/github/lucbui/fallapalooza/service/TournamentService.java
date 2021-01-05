@@ -90,4 +90,13 @@ public class TournamentService {
     public List<Tournament> getAllTournaments() {
         return tournamentRepository.findAll();
     }
+
+    /**
+     * Get current tournament
+     * @return The current tournament
+     */
+    public Tournament getCurrentTournament() {
+        return tournamentRepository.getCurrentTournament()
+                .orElseThrow(TournamentNotFoundException::new);
+    }
 }

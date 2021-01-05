@@ -29,4 +29,11 @@ public interface TeamRepository extends JpaRepository<Team, Long> {
      * @return The team
      */
     Optional<Team> getTeamByTournamentIdAndName(long tournamentId, String name);
+
+    /**
+     * Get the active teams (first 32 signed-up teams)
+     * @param tournamentId The tournament ID
+     * @return The teams
+     */
+    List<Team> getFirst32ByTournamentIdOrderByCreatedDateAsc(long tournamentId);
 }

@@ -29,10 +29,16 @@ public class TeamController {
         return teamService.getByPageable(pageable);
     }
 
-    @GetMapping("/tournament/{id}")
+    @GetMapping("/tournament/{id}/active")
+    @ApiOperation("Retrieve all active teams in the tournament")
+    public List<Team> getActiveTeams(@PathVariable @ApiParam("${api.tournament.id}") long id) {
+        return teamService.getActiveTeamsByTournamentId(id);
+    }
+
+    @GetMapping("/tournament/{id}/all")
     @ApiOperation("Retrieve the Teams (both active and backup) in a tournament")
-    public List<Team> getTeamsByTournamentId(@PathVariable @ApiParam("${api.tournament.id}") long tournamentId) {
-        return teamService.getByTournamentId(tournamentId);
+    public List<Team> getTeamsByTournamentId(@PathVariable @ApiParam("${api.tournament.id}") long id) {
+        return teamService.getByTournamentId(id);
     }
 
     @GetMapping("/{id}")

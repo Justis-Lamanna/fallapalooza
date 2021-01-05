@@ -1,5 +1,6 @@
 package com.github.lucbui.fallapalooza.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
@@ -18,21 +19,25 @@ public abstract class Auditable<U> {
     @CreatedBy
     @Column(name = "created_by")
     @ApiModelProperty("${api.common.createdBy}")
+    @JsonIgnore
     private U createdBy;
 
     @CreatedDate
     @Column(name = "created_date", columnDefinition = "TIMESTAMP")
     @ApiModelProperty("${api.common.createdDate}")
+    @JsonIgnore
     private LocalDateTime createdDate;
 
     @LastModifiedBy
     @Column(name = "last_modified_by")
     @ApiModelProperty("${api.common.lastModifiedBy}")
+    @JsonIgnore
     private U lastModifiedBy;
 
     @LastModifiedDate
     @Column(name = "last_modified_date", columnDefinition = "TIMESTAMP")
     @ApiModelProperty("${api.common.lastModifiedDate}")
+    @JsonIgnore
     private LocalDateTime lastModifiedDate;
 
     public U getCreatedBy() {

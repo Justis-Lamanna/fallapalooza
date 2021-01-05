@@ -25,6 +25,12 @@ public class TournamentController {
         return tournamentService.getAllTournaments();
     }
 
+    @GetMapping("/current")
+    @ApiOperation("Retrieve the current tournament")
+    public Tournament getCurrentTournament() {
+        return tournamentService.getCurrentTournament();
+    }
+
     @GetMapping("/{id}")
     @ApiOperation("Retrieve a Tournament by its ID")
     public Tournament getTournamentById(@PathVariable @ApiParam("${tournament.id}") long id) {
