@@ -1,6 +1,7 @@
 package com.github.lucbui.fallapalooza.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -18,6 +19,7 @@ public class TeamMember extends Auditable<String> {
     @Id
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @ApiModelProperty("${api.teamMember.id}")
     private Long id;
 
     @NonNull
@@ -31,5 +33,6 @@ public class TeamMember extends Auditable<String> {
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User player;
 
+    @ApiModelProperty("${api.teamMember.backup}")
     private boolean backup;
 }

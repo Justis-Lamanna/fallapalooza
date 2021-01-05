@@ -25,3 +25,19 @@ api:
     discordId: The user's Discord ID. Expected to be in the format <discord-name>#<four-digit id>
     twitchId: The user's Twitch ID. Expected to be their Twitch username
     twitterId: The user's Twitter ID. Expected to be their Twitter handle (no @)
+  tournament:
+    id: The tournament's ID
+    name: The tournament's name
+    signUpStartDate: The date and time tournament sign-ups begin
+    signUpEndDate: The date and time tournament sign-ups close
+    startDate: The date and time the tournament begins
+    endDate: The date and time the tournament ends
+  team:
+    id: The team's ID
+    name: The team's name
+    color: The team's color
+    seed: The team's seed
+    preferredRegion: The team's preferred game region
+  teamMember:
+    id: The team member's ID
+    backup: Boolean indicating if this is a backup team member

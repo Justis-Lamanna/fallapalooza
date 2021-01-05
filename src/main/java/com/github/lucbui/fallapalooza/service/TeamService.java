@@ -21,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.time.OffsetDateTime;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -142,5 +143,14 @@ public class TeamService {
      */
     public Page<Team> getByPageable(Pageable pageable) {
         return teamRepository.findAll(pageable);
+    }
+
+    /**
+     * Retrieve all teams in a tournament
+     * @param tournamentId The tournament ID
+     * @return The teams of that tournament
+     */
+    public List<Team> getByTournamentId(long tournamentId) {
+        return teamRepository.getTeamByTournamentId(tournamentId);
     }
 }

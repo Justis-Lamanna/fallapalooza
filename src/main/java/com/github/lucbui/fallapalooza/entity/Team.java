@@ -1,6 +1,7 @@
 package com.github.lucbui.fallapalooza.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,17 +23,22 @@ public class Team extends Auditable<String> {
     @Id
     @Setter(AccessLevel.PROTECTED)
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @ApiModelProperty("${api.team.id}")
     private Long id;
 
     @NonNull
     @Column(nullable = false)
+    @ApiModelProperty("${api.team.name}")
     private String name;
 
+    @ApiModelProperty("${api.team.color}")
     private String color;
 
+    @ApiModelProperty("${api.team.seed}")
     private Integer seed;
 
     @Enumerated(EnumType.ORDINAL)
+    @ApiModelProperty("${api.team.preferredRegion}")
     private Region preferredRegion;
 
     @NonNull
