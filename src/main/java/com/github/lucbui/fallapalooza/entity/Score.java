@@ -1,5 +1,6 @@
 package com.github.lucbui.fallapalooza.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -22,6 +23,7 @@ public class Score extends Auditable<String> {
     @NonNull
     @ManyToOne(optional = false)
     @JoinColumn(name = "matchup_id", referencedColumnName = "id")
+    @JsonIgnore
     private Matchup matchup;
 
     @NonNull

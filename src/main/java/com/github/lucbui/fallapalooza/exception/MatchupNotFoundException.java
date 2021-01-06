@@ -8,4 +8,8 @@ public class MatchupNotFoundException extends RuntimeException {
     public MatchupNotFoundException(long id) {
         super("No matchup found: " + id);
     }
+
+    public MatchupNotFoundException() {
+        super();
+    }
 }

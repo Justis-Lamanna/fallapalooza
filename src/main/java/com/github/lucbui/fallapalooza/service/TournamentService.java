@@ -38,7 +38,13 @@ public class TournamentService {
         Tournament fT = tournamentRepository.save(t);
 
         List<Round> rounds = IntStream.range(0, 5)
-                .mapToObj(i -> new Round(i, getRoundByIndex(i), fT))
+                .mapToObj(i -> {
+                    Round r = new Round(i, getRoundByIndex(i), fT);
+                    if(i == 4) {
+                        r.setFinalRound(true);
+                    }
+                    return r;
+                })
                 .collect(Collectors.toList());
 
         roundRepository.saveAll(rounds);

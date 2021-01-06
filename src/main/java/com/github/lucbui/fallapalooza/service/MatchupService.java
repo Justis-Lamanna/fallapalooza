@@ -6,6 +6,7 @@ import com.github.lucbui.fallapalooza.entity.Team;
 import com.github.lucbui.fallapalooza.exception.MatchupNotFoundException;
 import com.github.lucbui.fallapalooza.exception.MisconfiguredTournamentException;
 import com.github.lucbui.fallapalooza.exception.TeamNotFoundException;
+import com.github.lucbui.fallapalooza.model.Bracket;
 import com.github.lucbui.fallapalooza.model.matchup.InitializeMatchupRequest;
 import com.github.lucbui.fallapalooza.model.matchup.Seeds;
 import com.github.lucbui.fallapalooza.model.matchup.UpdateMatchupRequest;
@@ -32,6 +33,9 @@ public class MatchupService {
 
     @Autowired
     private RoundRepository roundRepository;
+
+    @Autowired
+    private BracketService bracketService;
 
     @Transactional
     public List<Matchup> initializeMatchups(InitializeMatchupRequest request) {
@@ -102,5 +106,11 @@ public class MatchupService {
 
     public List<Matchup> getMatchupsForRound(long id) {
         return matchupRepository.getMatchupByRoundId(id);
+    }
+
+    public Bracket getBracketForTournament(long id) {
+        return matchupRepository.getMatchupByRoundTournamentIdAndRoundFinalRoundTrue(id)
+                .map(matchup -> bracketService.matchupsToBracket(matchup))
+                .orElseThrow(() -> new MatchupNotFoundException(id));
     }
 }

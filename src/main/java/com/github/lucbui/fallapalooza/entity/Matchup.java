@@ -1,5 +1,6 @@
 package com.github.lucbui.fallapalooza.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.*;
 
@@ -38,6 +39,7 @@ public class Matchup extends Auditable<String> {
     @OneToOne
     @JoinColumn(name = "team_one_previous_matchup_id", referencedColumnName = "id")
     @ApiModelProperty("${api.matchup.previousMatchupTeamOne}")
+    @JsonIgnore
     private Matchup previousMatchupTeamOne;
 
     @ManyToOne
@@ -48,6 +50,7 @@ public class Matchup extends Auditable<String> {
     @OneToOne
     @JoinColumn(name = "team_two_previous_matchup_id", referencedColumnName = "id")
     @ApiModelProperty("${api.matchup.previousMatchupTeamTwo}")
+    @JsonIgnore
     private Matchup previousMatchupTeamTwo;
 
     @NonNull
