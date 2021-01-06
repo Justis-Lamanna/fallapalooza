@@ -8,7 +8,7 @@ import com.github.lucbui.fallapalooza.entity.User;
 import com.github.lucbui.fallapalooza.model.matchup.InitializeMatchupRequest;
 import com.github.lucbui.fallapalooza.model.matchup.Seeds;
 import com.github.lucbui.fallapalooza.model.team.CreateTeamRequest;
-import com.github.lucbui.fallapalooza.model.tournament.QuickCreateTournamentRequest;
+import com.github.lucbui.fallapalooza.model.tournament.SimpleCreateTournamentRequest;
 import com.github.lucbui.fallapalooza.model.user.CreateUserRequest;
 import com.github.lucbui.fallapalooza.service.MatchupService;
 import com.github.lucbui.fallapalooza.service.TeamService;
@@ -46,7 +46,7 @@ public class FallapaloozaApplication {
 			MatchupService matchupService) {
 		return (args) -> {
 
-			QuickCreateTournamentRequest qctr = new QuickCreateTournamentRequest();
+			SimpleCreateTournamentRequest qctr = new SimpleCreateTournamentRequest();
 			qctr.setName("Fallapalooza");
 			qctr.setSignUpStartDate(OffsetDateTime.now().minus(10, ChronoUnit.MINUTES));
 			qctr.setStartDate(OffsetDateTime.now().plus(5, ChronoUnit.DAYS));

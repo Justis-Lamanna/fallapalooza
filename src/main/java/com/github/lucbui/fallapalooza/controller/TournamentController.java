@@ -1,7 +1,7 @@
 package com.github.lucbui.fallapalooza.controller;
 
 import com.github.lucbui.fallapalooza.entity.Tournament;
-import com.github.lucbui.fallapalooza.model.tournament.QuickCreateTournamentRequest;
+import com.github.lucbui.fallapalooza.model.tournament.SimpleCreateTournamentRequest;
 import com.github.lucbui.fallapalooza.model.tournament.UpdateTournamentRequest;
 import com.github.lucbui.fallapalooza.service.TournamentService;
 import io.swagger.annotations.ApiOperation;
@@ -39,7 +39,7 @@ public class TournamentController {
 
     @PostMapping
     @ApiOperation("Create a tournament")
-    public Tournament createStandardTournament(@Valid @RequestBody QuickCreateTournamentRequest request) {
+    public Tournament createStandardTournament(@Valid @RequestBody SimpleCreateTournamentRequest request) {
         return tournamentService.createStandard(request);
     }
 

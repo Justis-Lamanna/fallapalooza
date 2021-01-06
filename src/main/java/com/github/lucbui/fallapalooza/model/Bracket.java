@@ -14,9 +14,32 @@ public class Bracket {
 
     @Data
     public static class Match {
+        private Long matchupId;
         private Long teamOne;
         private Long teamTwo;
+        private Map<Long, Map<Integer, Integer>> teamOneScores = new HashMap<>();
+        private Map<Long, Map<Integer, Integer>> teamTwoScores = new HashMap<>();
         private Match teamOnePreviousMatch;
         private Match teamTwoPreviousMatch;
+
+        public Long getTeamOneTotal() {
+            if(teamOneScores.size() == 0) {
+                return null;
+            }
+            return teamOneScores.values().stream()
+                    .flatMap(c -> c.values().stream())
+                    .mapToLong(l -> l)
+                    .sum();
+        }
+
+        public Long getTeamTwoTotal() {
+            if(teamTwoScores.size() == 0) {
+                return null;
+            }
+            return teamTwoScores.values().stream()
+                    .flatMap(c -> c.values().stream())
+                    .mapToLong(l -> l)
+                    .sum();
+        }
     }
 }

@@ -7,8 +7,8 @@ import com.github.lucbui.fallapalooza.entity.User;
 import com.github.lucbui.fallapalooza.exception.InvalidSignUpException;
 import com.github.lucbui.fallapalooza.exception.TeamNotFoundException;
 import com.github.lucbui.fallapalooza.exception.TournamentNotFoundException;
-import com.github.lucbui.fallapalooza.model.team.CreateTeamAndUserRequest;
 import com.github.lucbui.fallapalooza.model.team.CreateTeamRequest;
+import com.github.lucbui.fallapalooza.model.team.SimpleCreateTeamRequest;
 import com.github.lucbui.fallapalooza.model.team.UpdateTeamRequest;
 import com.github.lucbui.fallapalooza.repository.TeamMemberRepository;
 import com.github.lucbui.fallapalooza.repository.TeamRepository;
@@ -66,7 +66,7 @@ public class TeamService {
     }
 
     @Transactional
-    public Team create(CreateTeamAndUserRequest request) {
+    public Team create(SimpleCreateTeamRequest request) {
         Tournament tournament = getAndValidateTournament(request.getTournamentId());
 
         Team team = new Team(request.getName(), tournament);
@@ -75,7 +75,7 @@ public class TeamService {
         team.setSeed(request.getSeed());
         team = teamRepository.save(team);
 
-        for(CreateTeamAndUserRequest.UserIdentifier dId : request.getUserIdentifiers()) {
+        for(SimpleCreateTeamRequest.UserIdentifier dId : request.getUserIdentifiers()) {
             User user = getUserByIdType(dId).orElseGet(() -> new User(dId.getName(), dId.getTwitchId(), dId.getDiscordId()));
 
             user.setName(dId.getName());
@@ -108,7 +108,7 @@ public class TeamService {
         return tournament;
     }
 
-    private Optional<User> getUserByIdType(CreateTeamAndUserRequest.UserIdentifier id) {
+    private Optional<User> getUserByIdType(SimpleCreateTeamRequest.UserIdentifier id) {
         return userRepository.getUserByDiscordId(id.getTwitchId());
     }
 

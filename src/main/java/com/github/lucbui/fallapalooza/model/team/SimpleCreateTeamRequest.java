@@ -8,7 +8,7 @@ import javax.validation.constraints.*;
 import java.util.List;
 
 @Data
-public class CreateTeamAndUserRequest {
+public class SimpleCreateTeamRequest {
     @NotNull
     @ApiModelProperty(value = "${api.tournament.id}", required = true)
     private Long tournamentId;

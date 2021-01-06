@@ -3,7 +3,7 @@ package com.github.lucbui.fallapalooza.service;
 import com.github.lucbui.fallapalooza.entity.Round;
 import com.github.lucbui.fallapalooza.entity.Tournament;
 import com.github.lucbui.fallapalooza.exception.TournamentNotFoundException;
-import com.github.lucbui.fallapalooza.model.tournament.QuickCreateTournamentRequest;
+import com.github.lucbui.fallapalooza.model.tournament.SimpleCreateTournamentRequest;
 import com.github.lucbui.fallapalooza.model.tournament.UpdateTournamentRequest;
 import com.github.lucbui.fallapalooza.repository.RoundRepository;
 import com.github.lucbui.fallapalooza.repository.TournamentRepository;
@@ -30,7 +30,7 @@ public class TournamentService {
      * @return The created Tournament
      */
     @Transactional
-    public Tournament createStandard(QuickCreateTournamentRequest request) {
+    public Tournament createStandard(SimpleCreateTournamentRequest request) {
         Tournament t = new Tournament(request.getName());
         t.setStartDate(request.getStartDate());
         t.setSignUpStartDate(request.getSignUpStartDate());

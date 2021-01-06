@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import java.time.OffsetDateTime;
 
 @Data
-public class QuickCreateTournamentRequest {
+public class SimpleCreateTournamentRequest {
     @NotBlank(message = "Must provide Tournament name")
     @ApiModelProperty(value = "${api.tournament.name}", required = true)
     private String name;

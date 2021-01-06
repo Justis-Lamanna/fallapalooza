@@ -1,8 +1,8 @@
 package com.github.lucbui.fallapalooza.controller;
 
 import com.github.lucbui.fallapalooza.entity.Team;
-import com.github.lucbui.fallapalooza.model.team.CreateTeamAndUserRequest;
 import com.github.lucbui.fallapalooza.model.team.CreateTeamRequest;
+import com.github.lucbui.fallapalooza.model.team.SimpleCreateTeamRequest;
 import com.github.lucbui.fallapalooza.model.team.UpdateTeamRequest;
 import com.github.lucbui.fallapalooza.service.TeamService;
 import io.swagger.annotations.ApiOperation;
@@ -52,7 +52,7 @@ public class TeamController {
     }
 
     @PostMapping("/bot")
-    public Team createTeamAndUsers(@Valid @RequestBody CreateTeamAndUserRequest request) {
+    public Team createTeamAndUsers(@Valid @RequestBody SimpleCreateTeamRequest request) {
         return teamService.create(request);
     }
 

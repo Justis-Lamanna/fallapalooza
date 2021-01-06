@@ -6,6 +6,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.OffsetDateTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -72,6 +73,9 @@ public class Matchup extends Auditable<String> {
     @Column(name = "end_date", columnDefinition = "TIMESTAMP")
     @ApiModelProperty("${api.matchup.endDate}")
     private OffsetDateTime endDate;
+
+    @OneToMany(mappedBy = "matchup")
+    private List<Score> scores;
 
     public enum Winner {
         UNDECIDED,
