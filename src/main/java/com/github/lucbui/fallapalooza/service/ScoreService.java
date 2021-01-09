@@ -70,9 +70,9 @@ public class ScoreService {
 
     private Optional<TeamMember> getTeamMemberByIdType(IdType idType, long tournamentId, String userId) {
         switch (idType) {
-            case TWITCH: return teamMemberRepository.getTeamMemberByTeamTournamentIdAndPlayerTwitchId(tournamentId, userId);
-            case TWITTER: return teamMemberRepository.getTeamMemberByTeamTournamentIdAndPlayerTwitterId(tournamentId, userId);
-            case DISCORD: return teamMemberRepository.getTeamMemberByTeamTournamentIdAndPlayerDiscordId(tournamentId, userId);
+            case TWITCH: return teamMemberRepository.getTeamMemberByTeamTournamentIdAndPlayerUserTwitchId(tournamentId, userId);
+            case TWITTER: return teamMemberRepository.getTeamMemberByTeamTournamentIdAndPlayerUserTwitterId(tournamentId, userId);
+            case DISCORD: return teamMemberRepository.getTeamMemberByTeamTournamentIdAndPlayerUserDiscordId(tournamentId, userId);
             default: return Optional.empty();
         }
     }

@@ -2,18 +2,16 @@ package com.github.lucbui.fallapalooza;
 
 import com.github.javafaker.Faker;
 import com.github.lucbui.fallapalooza.entity.Matchup;
+import com.github.lucbui.fallapalooza.entity.Participant;
 import com.github.lucbui.fallapalooza.entity.Team;
 import com.github.lucbui.fallapalooza.entity.Tournament;
-import com.github.lucbui.fallapalooza.entity.User;
 import com.github.lucbui.fallapalooza.model.matchup.InitializeMatchupRequest;
 import com.github.lucbui.fallapalooza.model.matchup.Seeds;
+import com.github.lucbui.fallapalooza.model.participant.ParticipateRequest;
 import com.github.lucbui.fallapalooza.model.team.CreateTeamRequest;
 import com.github.lucbui.fallapalooza.model.tournament.SimpleCreateTournamentRequest;
 import com.github.lucbui.fallapalooza.model.user.CreateUserRequest;
-import com.github.lucbui.fallapalooza.service.MatchupService;
-import com.github.lucbui.fallapalooza.service.TeamService;
-import com.github.lucbui.fallapalooza.service.TournamentService;
-import com.github.lucbui.fallapalooza.service.UserService;
+import com.github.lucbui.fallapalooza.service.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
@@ -24,7 +22,6 @@ import org.springframework.context.annotation.Bean;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -42,6 +39,7 @@ public class FallapaloozaApplication {
 	public CommandLineRunner demo(
 			TournamentService tournamentService,
 			UserService userService,
+			ParticipantService participantService,
 			TeamService teamService,
 			MatchupService matchupService) {
 		return (args) -> {
@@ -52,7 +50,7 @@ public class FallapaloozaApplication {
 			qctr.setStartDate(OffsetDateTime.now().plus(5, ChronoUnit.DAYS));
 			Tournament fallFinal = tournamentService.createStandard(qctr);
 
-			List<User> users = IntStream.range(0, 100)
+			List<Participant> participants = IntStream.range(0, 100)
 					.mapToObj(x -> {
 						CreateUserRequest cur = new CreateUserRequest();
 						cur.setName(FAKER.name().username());
@@ -62,9 +60,13 @@ public class FallapaloozaApplication {
 						cur.setDiscordId("discord_" + x);
 						return userService.create(cur);
 					})
-					.collect(Collectors.collectingAndThen(Collectors.toList(), l -> {
-						Collections.shuffle(l); return Collections.synchronizedList(l);
-					}));
+					.map(x -> {
+						ParticipateRequest pr = new ParticipateRequest();
+						pr.setTournamentId(fallFinal.getId());
+						pr.setUserId(x.getId());
+						return participantService.join(pr);
+					})
+					.collect(Collectors.toList());
 
 			List<Team> teams = IntStream.range(0, 40)
 					.parallel()
@@ -76,10 +78,10 @@ public class FallapaloozaApplication {
 						ctr.setSeed(x);
 						List<CreateTeamRequest.CreateMemberRequest> cmrs = new ArrayList<>();
 						CreateTeamRequest.CreateMemberRequest cmr1 = new CreateTeamRequest.CreateMemberRequest();
-						cmr1.setId(users.remove(0).getId());
+						cmr1.setId(participants.remove(0).getId());
 						cmrs.add(cmr1);
 						CreateTeamRequest.CreateMemberRequest cmr2 = new CreateTeamRequest.CreateMemberRequest();
-						cmr2.setId(users.remove(0).getId());
+						cmr2.setId(participants.remove(0).getId());
 						cmrs.add(cmr2);
 						ctr.setMembers(cmrs);
 						return teamService.create(ctr);

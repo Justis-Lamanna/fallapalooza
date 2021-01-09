@@ -29,7 +29,7 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
      * @param discordId The player's Discord ID
      * @return The member, if found
      */
-    Optional<TeamMember> getTeamMemberByTeamTournamentIdAndPlayerDiscordId(long tournamentId, String discordId);
+    Optional<TeamMember> getTeamMemberByTeamTournamentIdAndPlayerUserDiscordId(long tournamentId, String discordId);
 
     /**
      * Get a team member by the tournament and player ID
@@ -37,7 +37,7 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
      * @param twitterId The player's Twitter ID
      * @return The member, if found
      */
-    Optional<TeamMember> getTeamMemberByTeamTournamentIdAndPlayerTwitterId(long tournamentId, String twitterId);
+    Optional<TeamMember> getTeamMemberByTeamTournamentIdAndPlayerUserTwitterId(long tournamentId, String twitterId);
 
     /**
      * Get a team member by the tournament and player ID
@@ -45,7 +45,7 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
      * @param twitchId The player's Twitch ID
      * @return The member, if found
      */
-    Optional<TeamMember> getTeamMemberByTeamTournamentIdAndPlayerTwitchId(long tournamentId, String twitchId);
+    Optional<TeamMember> getTeamMemberByTeamTournamentIdAndPlayerUserTwitchId(long tournamentId, String twitchId);
 
     /**
      * Get all team members in a team

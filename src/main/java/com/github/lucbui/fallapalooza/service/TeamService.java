@@ -1,19 +1,13 @@
 package com.github.lucbui.fallapalooza.service;
 
-import com.github.lucbui.fallapalooza.entity.Team;
-import com.github.lucbui.fallapalooza.entity.TeamMember;
-import com.github.lucbui.fallapalooza.entity.Tournament;
-import com.github.lucbui.fallapalooza.entity.User;
+import com.github.lucbui.fallapalooza.entity.*;
 import com.github.lucbui.fallapalooza.exception.InvalidSignUpException;
 import com.github.lucbui.fallapalooza.exception.TeamNotFoundException;
 import com.github.lucbui.fallapalooza.exception.TournamentNotFoundException;
 import com.github.lucbui.fallapalooza.model.team.CreateTeamRequest;
 import com.github.lucbui.fallapalooza.model.team.SimpleCreateTeamRequest;
 import com.github.lucbui.fallapalooza.model.team.UpdateTeamRequest;
-import com.github.lucbui.fallapalooza.repository.TeamMemberRepository;
-import com.github.lucbui.fallapalooza.repository.TeamRepository;
-import com.github.lucbui.fallapalooza.repository.TournamentRepository;
-import com.github.lucbui.fallapalooza.repository.UserRepository;
+import com.github.lucbui.fallapalooza.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -38,6 +32,9 @@ public class TeamService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private ParticipantRepository participantRepository;
+
     /**
      * Create a team
      * @param request Team creation request
@@ -54,7 +51,7 @@ public class TeamService {
 
         int numberOfActiveMembers = 0;
         for(CreateTeamRequest.CreateMemberRequest cmRequest : request.getMembers()) {
-            TeamMember member = new TeamMember(team, userRepository.getOne(cmRequest.getId()));
+            TeamMember member = new TeamMember(team, participantRepository.getOne(cmRequest.getId()));
             member.setBackup(numberOfActiveMembers > 2 || cmRequest.isBackup());
             member = teamMemberRepository.save(member);
             if(!member.isBackup()) {
@@ -76,7 +73,9 @@ public class TeamService {
         team = teamRepository.save(team);
 
         for(SimpleCreateTeamRequest.UserIdentifier dId : request.getUserIdentifiers()) {
-            User user = getUserByIdType(dId).orElseGet(() -> new User(dId.getName(), dId.getTwitchId(), dId.getDiscordId()));
+            //Sign up the user, if necessary
+            User user = getUserByIdType(dId)
+                    .orElseGet(() -> new User(dId.getName(), dId.getTwitchId(), dId.getDiscordId()));
 
             user.setName(dId.getName());
             user.setPronouns(dId.getPronouns());
@@ -84,9 +83,14 @@ public class TeamService {
             user.setCrownCount(dId.getCrownCount());
             user.setTwitterId(dId.getTwitterId());
 
-            user = userRepository.save(user);
+            User finalUser = userRepository.save(user);
 
-            TeamMember member = new TeamMember(team, user);
+            //Enroll as participant in the tournament
+            Participant participant = participantRepository.getParticipantByTournamentIdAndUserId(request.getTournamentId(), finalUser.getId())
+                    .orElseGet(() -> participantRepository.save(new Participant(tournament, finalUser)));
+
+            //Join the team
+            TeamMember member = new TeamMember(team, participant);
             member.setBackup(dId.isBackup());
             teamMemberRepository.save(member);
         }

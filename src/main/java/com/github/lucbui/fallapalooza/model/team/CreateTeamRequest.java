@@ -33,7 +33,7 @@ public class CreateTeamRequest {
     @Data
     public static class CreateMemberRequest {
         @NotNull
-        @ApiModelProperty(value = "${api.user.id}", required = true)
+        @ApiModelProperty(value = "${api.participant.id}", required = true)
         private Long id;
 
         @ApiModelProperty("${api.teamMember.backup}")
