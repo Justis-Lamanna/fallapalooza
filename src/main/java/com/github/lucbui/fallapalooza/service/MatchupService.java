@@ -113,4 +113,11 @@ public class MatchupService {
                 .map(matchup -> bracketService.matchupsToBracket(matchup))
                 .orElseThrow(() -> new MatchupNotFoundException(id));
     }
+
+    public List<Bracket> getBracketsForTournament(long id, int round) {
+        return matchupRepository.getMatchupByRoundTournamentIdAndRoundNumber(id, round)
+                .stream()
+                .map(matchup -> bracketService.matchupsToBracket(matchup))
+                .collect(Collectors.toList());
+    }
 }
